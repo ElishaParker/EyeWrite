@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EyeWrite</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="instructions" class="overlay hidden">
+    <div class="card">
+      <h2>👁️ Welcome to EyeWrite</h2>
+      <ul>
+        <li>Double blink / 1.5 s gaze → Click</li>
+        <li>Triple blink → Select text</li>
+        <li>Gaze top-left → Cursor menu</li>
+        <li>Gaze 1.5 s on text → Open keyboard</li>
+        <li>Top / bottom banners → Scroll</li>
+        <li>🗙 = Close keyboard / overlay</li>
+      </ul>
+      <button id="closeInstructions">Got it 🗙</button>
+    </div>
+  </div>
+  <header id="toolbar">
+    <select id="fontSelect">
+      <option>Arial</option><option>Times New Roman</option>
+      <option>Courier New</option><option>Verdana</option><option>Georgia</option>
+    </select>
+    <input id="fontSize" type="number" min="8" max="72" value="16" />
+    <button id="boldBtn">B</button><button id="italicBtn">I</button><button id="underlineBtn">U</button>
+    <button id="fullBtn">Full ☐</button><button id="halfBtn">Half ▭</button>
+    <button id="helpBtn">❔</button>
+  </header>
+  <div id="topScroll"></div>
+  <div id="textArea" contenteditable="true"></div>
+  <div id="bottomScroll"></div>
+  <footer id="controls">
+    <button id="searchBtn">🔍 Search</button>
+    <button id="speakBtn">🔊 Speak</button>
+  </footer>
+  <div id="keyboard" class="hidden">
+    <div id="kbHeader">
+      <span id="kbMode">🕊️ Precision</span>
+      <button id="kbToggle">⚡ QuickType</button>
+      <button id="kbClose">🗙</button>
+    </div>
+    <div id="kbKeys"></div>
+  </div>
+  <script src="assets/libs/webgazer.js"></script>
+  <script src="assets/libs/mediapipe.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
