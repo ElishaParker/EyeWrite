@@ -136,36 +136,17 @@ document.getElementById("cursorText").onclick = () => {
   };
 
    // ---------- QuickType Button ----------
-const quickTypeBtn = document.getElementById("quickTypeBtn");
+// ---------- QuickType Button ----------
 
+// ---------- Hover Speed Mode Toggle ----------
+const quickTypeBtn = document.getElementById("quickTypeBtn");
 if (quickTypeBtn) {
   quickTypeBtn.addEventListener("click", () => {
-    const lastWord = textBox.innerText.trim().split(/\s+/).pop() || "";
-    let suggestion = "";
+    quickType = !quickType;
+    quickTypeBtn.textContent = quickType ? "⚡ QuickType" : "🕊 Precision";
 
-    // Simple predictive assist — expand based on context
-    switch (lastWord.toLowerCase()) {
-      case "hello":
-        suggestion = "world!";
-        break;
-      case "thank":
-        suggestion = "you very much!";
-        break;
-      case "how":
-        suggestion = "are you feeling today?";
-        break;
-      default:
-        suggestion = "✨ Keep writing your thoughts freely.";
-    }
-
-    // Insert suggestion
-    textBox.innerText += (textBox.innerText.endsWith(" ") ? "" : " ") + suggestion;
-    const range = document.createRange();
-    const sel = window.getSelection();
-    range.selectNodeContents(textBox);
-    range.collapse(false);
-    sel.removeAllRanges();
-    sel.addRange(range);
+    // Adjust dwell timing dynamically
+    dwellTime = quickType ? 700 : 1500;
   });
 }
 
