@@ -1,26 +1,115 @@
+/* ===== Base Layout ===== */
 body {
-  margin:0; font-family:Arial; background:#111; color:#eee;
-  display:flex; flex-direction:column; height:100vh;
+  margin: 0;
+  background: #111;
+  color: #eee;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
+
+/* ===== Toolbar & Footer ===== */
 #toolbar, #controls {
-  display:flex; gap:8px; padding:8px; background:#222; align-items:center;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: #222;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
+#toolbar button, #controls button, #toolbar select, #toolbar input {
+  background: #333; color: #fff; border: none;
+  padding: 6px 10px; border-radius: 6px;
+  cursor: pointer;
+}
+#toolbar button:hover, #controls button:hover {
+  background: #444;
+}
+
+/* ===== Text Area ===== */
 #textArea {
-  flex:1; overflow-y:auto; overflow-x:hidden;
-  padding:1rem; outline:none; font-size:16px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem;
+  font-size: 16px;
+  outline: none;
+  background: #181818;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
 }
-#topScroll, #bottomScroll {
-  height:8px; background:#333;
+
+/* ===== Scroll Bands ===== */
+.scrollBand {
+  height: 24px;
+  text-align: center;
+  background: #202020;
+  color: #666;
+  font-size: 12px;
+  user-select: none;
 }
+.scrollBand:hover {
+  color: #fff;
+  background: #333;
+}
+
+/* ===== Keyboard ===== */
 #keyboard {
-  position:fixed; bottom:0; left:0; right:0;
-  background:#222; padding:10px; border-top:1px solid #444;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: #1e1e1e;
+  padding: 10px;
+  border-top: 1px solid #444;
 }
+#kbHeader {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 6px;
+}
+#kbKeys {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 4px;
+}
+#kbKeys button {
+  background: #333; color: #eee; border: none;
+  border-radius: 6px; padding: 10px;
+  font-size: 16px; cursor: pointer;
+}
+#kbKeys button:hover { background: #555; }
+
+/* ===== Cursor Menu ===== */
+#cursorMenu {
+  position: fixed; top: 10px; left: 10px;
+  background: #222; border: 1px solid #444;
+  border-radius: 8px; padding: 6px; display: flex;
+  flex-direction: column; gap: 4px;
+}
+#cursorMenu button {
+  background: #333; color: #eee; border: none;
+  border-radius: 4px; padding: 4px 8px; cursor: pointer;
+}
+#cursorMenu button:hover { background: #444; }
+
+/* ===== Overlay ===== */
 .overlay {
-  position:fixed; top:0; left:0; right:0; bottom:0;
-  background:rgba(0,0,0,0.7); display:flex; justify-content:center; align-items:center;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 .overlay .card {
-  background:#fff; color:#000; padding:20px; border-radius:12px; max-width:400px; text-align:left;
+  background: #fff; color: #000;
+  padding: 20px; border-radius: 12px;
+  max-width: 420px; text-align: left;
 }
-.hidden { display:none; }
+.overlay button {
+  background: #000; color: #fff; border: none;
+  border-radius: 6px; padding: 8px 12px;
+  margin-top: 12px; cursor: pointer;
+}
+.hidden { display: none; }
