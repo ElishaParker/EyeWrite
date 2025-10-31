@@ -7,67 +7,47 @@ body{
   display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
   gap:8px;padding:8px;background:#222;
 }
-#toolbar button,#controls button,select,input[type=number]{
+button,select,input{
   background:#333;color:#fff;border:none;
   padding:6px 10px;border-radius:6px;cursor:pointer;
 }
-#toolbar button:hover,#controls button:hover{background:#444;}
+button:hover{background:#444;}
 #textArea{
-  flex:1;overflow-y:auto;overflow-x:hidden;
-  padding:1rem;font-size:16px;outline:none;
-  background:#181818;border-top:1px solid #333;border-bottom:1px solid #333;
+  flex:1;padding:1rem;overflow-y:auto;overflow-x:hidden;
+  font-size:16px;background:#181818;outline:none;
+  border-top:1px solid #333;border-bottom:1px solid #333;
 }
-.scrollBand{
-  height:24px;text-align:center;background:#202020;color:#666;
-  font-size:12px;user-select:none;
-}
-.scrollBand:hover{color:#fff;background:#333;}
 
 /* 🎹 Keyboard */
 #keyboard{
   background:#1e1e1e;border-top:1px solid #444;
-  padding:8px;display:flex;flex-direction:column;
-  height:50vh;z-index:500;
+  padding:6px;display:flex;flex-direction:column;
+  height:50vh;z-index:400;
 }
 #kbHeader{
   display:flex;justify-content:space-between;align-items:center;
   margin-bottom:6px;
 }
-#kbKeys{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(40px,1fr));
-  gap:4px;flex:1;overflow-y:auto;
+.kbRow{display:flex;justify-content:center;gap:4px;margin:2px 0;}
+.kbRow button{
+  background:#333;color:#eee;border:none;border-radius:6px;
+  padding:10px;font-size:14px;min-width:40px;
 }
-#kbKeys button{
-  position:relative;background:#333;color:#eee;
-  border:none;border-radius:6px;padding:10px;font-size:14px;
-  cursor:pointer;transition:background .2s;
+.kbRow button.wide{min-width:80px;}
+.kbRow button.extraWide{min-width:160px;}
+.kbRow button:hover{background:#555;}
+
+/* cursor dwell ring */
+#cursorRing{
+  position:fixed;width:20px;height:20px;
+  border:2px solid rgba(255,255,255,0.6);
+  border-radius:50%;pointer-events:none;z-index:1000;
+  animation:none;
 }
-#kbKeys button:hover,#kbKeys button.active{background:#555;}
-.dwell-ring{
-  position:absolute;top:4px;left:4px;
-  width:calc(100% - 8px);height:calc(100% - 8px);
-  border-radius:50%;border:2px solid rgba(255,255,255,0.4);
-  animation:fillRing var(--dwellTime) linear forwards;
-  pointer-events:none;
-}
-@keyframes fillRing{
-  0%{transform:scale(0.2);opacity:.5;}
-  100%{transform:scale(1);opacity:0;}
+@keyframes dwellFill{
+  0%{stroke-dashoffset:100;opacity:.7;}
+  100%{stroke-dashoffset:0;opacity:0;}
 }
 
-/* Overlays */
-.overlay{
-  position:fixed;top:0;left:0;right:0;bottom:0;
-  background:rgba(0,0,0,0.7);
-  display:flex;justify-content:center;align-items:center;z-index:1000;
-}
-.overlay .card{
-  background:#fff;color:#000;padding:20px;
-  border-radius:12px;max-width:420px;text-align:left;
-}
-.overlay button{
-  background:#000;color:#fff;border:none;
-  border-radius:6px;padding:8px 12px;margin-top:10px;cursor:pointer;
-}
+/* util */
 .hidden{display:none;}
