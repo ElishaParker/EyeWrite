@@ -1,120 +1,75 @@
 /* ============================================================
-   EyeWrite v1.6.2 — Stability & Hover Mode Patch
-   Includes: Scrollbar controls, Hover toggle, Toolbar & Save fixes
+   EyeWrite v1.6.4 — Stable Layout + Hover + Save Patch
    ============================================================ */
-window.addEventListener('load', () => {
-  console.log("EyeWrite fully loaded ✅");
-});
-
-// ---------- Initialization ----------
-document.addEventListener('DOMContentLoaded', () => {
-  const textBox = document.getElementById('textArea');
-  const kb = document.getElementById('keyboard');
-  const ring = document.getElementById('cursorRing');
+document.addEventListener("DOMContentLoaded", () => {
+  const textBox = document.getElementById("textArea");
+  const ring = document.getElementById("cursorRing");
+  const kb = document.getElementById("keyboard");
+  const hoverBtn = document.getElementById("hoverToggle");
+  const saveBtn = document.getElementById("saveBtn");
+  const saveMenu = document.getElementById("saveMenu");
   let quickType = false, shiftOn = false, capsOn = false;
   let hoverMode = true, dwellTimer = null, debounce = false;
 
-  // ---------- Toolbar Controls ----------
-document.getElementById('keyboardToggle').addEventListener('click', () => {
-  kb.classList.toggle('hidden');
-  kb.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  console.log('Keyboard toggled:', !kb.classList.contains('hidden'));
-});
-
-  document.getElementById('kbClose').onclick = () => kb.classList.add('hidden');
-  document.getElementById('kbToggle').onclick = () => {
-    quickType = !quickType;
-    document.getElementById('kbMode').textContent = quickType ? '⚡ QuickType' : '🕊 Precision';
-  };
-
-  document.getElementById('fullBtn').onclick = () => {
+  // ---------- Window & Cursor ----------
+  document.getElementById("fullBtn").onclick = () => {
     window.moveTo(0, 0);
     window.resizeTo(screen.availWidth, screen.availHeight);
   };
-  document.getElementById('halfBtn').onclick = () => {
+  document.getElementById("halfBtn").onclick = () => {
     window.moveTo(0, 0);
     window.resizeTo(screen.availWidth / 2, screen.availHeight);
   };
+  document.getElementById("cursorDefault").onclick = () => textBox.style.cursor = "default";
+  document.getElementById("cursorCross").onclick = () => textBox.style.cursor = "crosshair";
+  document.getElementById("cursorText").onclick = () => textBox.style.cursor = "text";
 
-  document.getElementById('cursorDefault').onclick = () => textBox.style.cursor = 'default';
-  document.getElementById('cursorCross').onclick = () => textBox.style.cursor = 'crosshair';
-  document.getElementById('cursorText').onclick = () => textBox.style.cursor = 'text';
-
-  // Hover toggle button
-  const hoverBtn = document.getElementById('hoverToggle');
+  // ---------- Hover Toggle ----------
   hoverBtn.onclick = () => {
     hoverMode = !hoverMode;
-    hoverBtn.textContent = hoverMode ? '🌀 Hover ON' : '🌀 Hover OFF';
-    hoverBtn.classList.toggle('active', hoverMode);
-    hoverBtn.classList.toggle('inactive', !hoverMode);
+    hoverBtn.textContent = hoverMode ? "🌀 Hover ON" : "🌀 Hover OFF";
+    hoverBtn.classList.toggle("active", hoverMode);
   };
 
-  document.getElementById('voiceBtn').onclick = () =>
-    alert('Voice Modulation controls coming soon.');
-
-  // ---------- Formatting ----------
-  ['fontSelect', 'fontSize'].forEach(id => {
-    const el = document.getElementById(id);
-    el.addEventListener('change', e => {
-      if (id === 'fontSelect') textBox.style.fontFamily = e.target.value;
-      else textBox.style.fontSize = e.target.value + 'px';
-    });
-  });
-  ['boldBtn', 'italicBtn', 'underlineBtn'].forEach(id => {
-    const cmd = id === 'boldBtn' ? 'bold' : id === 'italicBtn' ? 'italic' : 'underline';
-    document.getElementById(id).onclick = () => document.execCommand(cmd);
-  });
+  // ---------- Font & Formatting ----------
+  document.getElementById("fontSelect").onchange = e => textBox.style.fontFamily = e.target.value;
+  document.getElementById("fontSize").onchange = e => textBox.style.fontSize = e.target.value + "px";
+  document.getElementById("boldBtn").onclick = () => document.execCommand("bold");
+  document.getElementById("italicBtn").onclick = () => document.execCommand("italic");
+  document.getElementById("underlineBtn").onclick = () => document.execCommand("underline");
 
   // ---------- Autosave ----------
-  textBox.innerHTML = localStorage.getItem('textData') || '';
-  setInterval(() => localStorage.setItem('textData', textBox.innerHTML), 5000);
+  textBox.innerHTML = localStorage.getItem("textData") || "";
+  setInterval(() => localStorage.setItem("textData", textBox.innerHTML), 5000);
 
-// ---------- Scroll Buttons (v1.6.3) ----------
-const scrollUpBtn = document.getElementById('scrollUp');
-const scrollDownBtn = document.getElementById('scrollDown');
-const scrollStep = 150; // adjustable scroll distance per click
+  // ---------- Scroll Bars ----------
+  const scrollStep = 150;
+  document.getElementById("scrollUp").onclick = () =>
+    textBox.scrollBy({ top: -scrollStep, behavior: "smooth" });
+  document.getElementById("scrollDown").onclick = () =>
+    textBox.scrollBy({ top: scrollStep, behavior: "smooth" });
 
-// Safety: ensure buttons exist before binding
-if (scrollUpBtn && scrollDownBtn && textBox) {
-  scrollUpBtn.addEventListener('click', () => {
-    textBox.scrollBy({
-      top: -scrollStep,
-      behavior: 'smooth'
-    });
-  });
-
-  scrollDownBtn.addEventListener('click', () => {
-    textBox.scrollBy({
-      top: scrollStep,
-      behavior: 'smooth'
-    });
-  });
-}
-
-
-  // ---------- Cursor Dwell Ring ----------
-  document.addEventListener('mousemove', e => {
-    ring.style.left = e.clientX - 11 + 'px';
-    ring.style.top = e.clientY - 11 + 'px';
+  // ---------- Dwell Ring ----------
+  document.addEventListener("mousemove", e => {
+    ring.style.left = `${e.clientX - 11}px`;
+    ring.style.top = `${e.clientY - 11}px`;
   });
 
   function startDwell(el) {
-    if (debounce || !hoverMode) return;
-    if (!el.matches('button,select,input')) return;
-    ring.classList.remove('hidden');
+    if (!hoverMode || debounce || !el.matches("button,select,input")) return;
+    ring.classList.remove("hidden");
     const dwellTime = quickType ? 700 : 1500;
-    ring.style.animation = 'none';
+    ring.style.animation = "none";
     void ring.offsetWidth;
     ring.style.animation = `ringFill ${dwellTime}ms linear forwards`;
     dwellTimer = setTimeout(() => el.click(), dwellTime);
   }
   function endDwell() {
-    ring.classList.add('hidden');
+    ring.classList.add("hidden");
     clearTimeout(dwellTimer);
   }
-
   function registerHoverables() {
-    document.querySelectorAll('button,select,input').forEach(el => {
+    document.querySelectorAll("button,select,input").forEach(el => {
       el.onmouseenter = () => startDwell(el);
       el.onmouseleave = endDwell;
     });
@@ -122,30 +77,30 @@ if (scrollUpBtn && scrollDownBtn && textBox) {
   registerHoverables();
   new MutationObserver(registerHoverables).observe(document.body, { childList: true, subtree: true });
 
-  // ---------- Keyboard Layout ----------
+  // ---------- Keyboard ----------
   const layout = [
-    ['`','1','2','3','4','5','6','7','8','9','0','-','=','⌫'],
-    ['Tab','Q','W','E','R','T','Y','U','I','O','P','[',']','\\'],
-    ['Caps','A','S','D','F','G','H','J','K','L',';','\'','↵'],
-    ['Shift','Z','X','C','V','B','N','M',',','.','/','↑'],
-    ['Ctrl','␣','Alt','←','↓','→']
+    ["`","1","2","3","4","5","6","7","8","9","0","-","=","⌫"],
+    ["Tab","Q","W","E","R","T","Y","U","I","O","P","[","]","\\"],
+    ["Caps","A","S","D","F","G","H","J","K","L",";","'","↵"],
+    ["Shift","Z","X","C","V","B","N","M",",",".","/","↑"],
+    ["Ctrl","␣","Alt","←","↓","→"]
   ];
-  const rows = ['row1','row2','row3','row4','row5'];
+  const rows = ["row1","row2","row3","row4","row5"];
 
   function buildKeyboard() {
     rows.forEach((r, i) => {
       const row = document.getElementById(r);
-      row.innerHTML = '';
+      row.innerHTML = "";
       layout[i].forEach(k => {
-        const b = document.createElement('button');
+        const b = document.createElement("button");
         b.textContent = k;
-        if (['⌫','Tab','Caps','Shift','Ctrl','Alt','␣','↵'].includes(k))
-          b.classList.add(k === '␣' ? 'extraWide' : 'wide');
+        if (["⌫","Tab","Caps","Shift","Ctrl","Alt","␣","↵"].includes(k))
+          b.classList.add(k === "␣" ? "extraWide" : "wide");
         b.onclick = () => keyAction(k);
         row.appendChild(b);
       });
     });
-    registerHoverables(); // ensure dwell works on keys
+    registerHoverables();
   }
   buildKeyboard();
 
@@ -153,111 +108,85 @@ if (scrollUpBtn && scrollDownBtn && textBox) {
     if (debounce) return;
     debounce = true; setTimeout(() => debounce = false, 200);
     switch (k) {
-      case '␣': insert(' '); break;
-      case '↵': insert('\n'); break;
-      case '⌫': document.execCommand('delete'); break;
-      case 'Tab': insert('    '); break;
-      case 'Caps': capsOn = !capsOn; break;
-      case 'Shift': shiftOn = true; setTimeout(() => shiftOn = false, 800); break;
+      case "␣": insert(" "); break;
+      case "↵": insert("\n"); break;
+      case "⌫": document.execCommand("delete"); break;
+      case "Tab": insert("    "); break;
+      case "Caps": capsOn = !capsOn; break;
+      case "Shift": shiftOn = true; setTimeout(() => shiftOn = false, 800); break;
       default: insert(formatChar(k));
     }
   }
-
   function formatChar(k) {
     const base = k.length === 1 ? k : k.charAt(0);
-    if (shiftOn ^ capsOn) return base.toUpperCase();
-    return base.toLowerCase();
+    return (shiftOn ^ capsOn) ? base.toUpperCase() : base.toLowerCase();
   }
-  function insert(c) { document.execCommand('insertText', false, c); }
+  function insert(c) { document.execCommand("insertText", false, c); }
 
   // ---------- Search & Speak ----------
-  document.getElementById('searchBtn').onclick = () =>
-    window.open('https://duckduckgo.com/?q=' + encodeURIComponent(textBox.innerText),
-      '_blank',
+  document.getElementById("searchBtn").onclick = () => {
+    window.open(
+      "https://duckduckgo.com/?q=" + encodeURIComponent(textBox.innerText),
+      "_blank",
       `width=${screen.availWidth / 2},height=${screen.availHeight},left=${screen.availWidth / 2},top=0`
     );
-
-  document.getElementById('speakBtn').onclick = () => {
+  };
+  document.getElementById("speakBtn").onclick = () => {
     const u = new SpeechSynthesisUtterance(textBox.innerText);
     speechSynthesis.speak(u);
   };
 
-  // ---------- Save Dropdown (v1.6.3) ----------
-const saveBtn = document.getElementById('saveBtn');
-const saveMenu = document.getElementById('saveMenu');
-
-// Start hidden on load
-if (saveMenu) saveMenu.classList.add('hidden');
-
-// Open/close on Save button click
-if (saveBtn) {
-  saveBtn.addEventListener('click', e => {
-    e.stopPropagation();
-    const isVisible = !saveMenu.classList.contains('hidden');
-    // Hide any open dropdowns first
-    document.querySelectorAll('.saveWrapper .saveMenu, #saveMenu').forEach(m => m.classList.add('hidden'));
-    // Then toggle this one
-    if (!isVisible) saveMenu.classList.remove('hidden');
-  });
-}
-
-// Handle each format button click
-saveMenu?.querySelectorAll('button').forEach(b => {
-  b.addEventListener('click', e => {
-    e.stopPropagation();
-    saveMenu.classList.add('hidden');
-    saveFile(b.dataset.format);
-  });
-});
-
-// Hide dropdown if user clicks anywhere else
-document.addEventListener('click', e => {
-  if (!saveBtn.contains(e.target) && !saveMenu.contains(e.target)) {
-    saveMenu.classList.add('hidden');
-  }
-});
-
-// Save logic
-function saveFile(fmt) {
-  const name = prompt('Enter file name:', 'EyeWrite-note');
-  if (!name) return;
-  const text = textBox.innerText;
-
-  if (fmt === 'txt') {
-    const blob = new Blob([text], { type: 'text/plain' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `${name}.txt`;
-    a.click();
-  } else if (fmt === 'pdf') {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
-    const lines = pdf.splitTextToSize(text, 500);
-    pdf.text(lines, 40, 60);
-    pdf.save(`${name}.pdf`);
-  } else if (fmt === 'docx') {
-    const { Document, Packer, Paragraph, TextRun } = window.docx;
-    const doc = new Document({
-      sections: [{
-        children: text.split('\n').map(line =>
-          new Paragraph({ children: [new TextRun(line)] }))
-      }]
+  // ---------- Save Dropdown ----------
+  if (saveMenu) saveMenu.classList.add("hidden");
+  if (saveBtn) {
+    saveBtn.addEventListener("click", e => {
+      e.stopPropagation();
+      const visible = !saveMenu.classList.contains("hidden");
+      document.querySelectorAll(".saveMenu").forEach(m => m.classList.add("hidden"));
+      if (!visible) saveMenu.classList.remove("hidden");
     });
-    Packer.toBlob(doc).then(blob => {
-      const a = document.createElement('a');
+  }
+  saveMenu?.querySelectorAll("button").forEach(b => {
+    b.addEventListener("click", e => {
+      e.stopPropagation();
+      saveMenu.classList.add("hidden");
+      saveFile(b.dataset.format);
+    });
+  });
+  document.addEventListener("click", e => {
+    if (!saveBtn.contains(e.target) && !saveMenu.contains(e.target))
+      saveMenu.classList.add("hidden");
+  });
+
+  function saveFile(fmt) {
+    const name = prompt("Enter file name:", "EyeWrite-note");
+    if (!name) return;
+    const text = textBox.innerText;
+
+    if (fmt === "txt") {
+      const blob = new Blob([text], { type: "text/plain" });
+      const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = `${name}.docx`;
+      a.download = `${name}.txt`;
       a.click();
-    });
+    } else if (fmt === "pdf") {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ orientation: "p", unit: "pt", format: "a4" });
+      const lines = pdf.splitTextToSize(text, 500);
+      pdf.text(lines, 40, 60);
+      pdf.save(`${name}.pdf`);
+    } else if (fmt === "docx") {
+      const { Document, Packer, Paragraph, TextRun } = window.docx;
+      const doc = new Document({
+        sections: [{ children: text.split("\n").map(line =>
+          new Paragraph({ children: [new TextRun(line)] })) }]
+      });
+      Packer.toBlob(doc).then(blob => {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `${name}.docx`;
+        a.click();
+      });
+    }
   }
-}
-
-// --- Safety Rebind ---
-['fullBtn','halfBtn','cursorDefault','cursorCross','cursorText','hoverToggle','keyboardToggle','voiceBtn','searchBtn','speakBtn','saveBtn']
-.forEach(id=>{
-  const el=document.getElementById(id);
-  if(!el) return;
-  el.addEventListener('click', e=>{
-    console.log(`Clicked ${id}`);
-  });
 });
