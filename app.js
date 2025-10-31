@@ -155,6 +155,25 @@ if (quickTypeBtn) {
   });
 }
 
+   // Also update the keyboard mode label dynamically
+const kbModeLabel = document.getElementById("kbModeText");
+if (kbModeLabel) {
+  kbModeLabel.textContent = quickType ? "⚡ QuickType" : "🕊 Precision";
+}
+
+quickTypeBtn.addEventListener("click", () => {
+  quickType = !quickType;
+  quickTypeBtn.textContent = quickType ? "⚡ QuickType" : "🕊 Precision";
+
+  // Adjust dwell timing dynamically
+  dwellTime = quickType ? 700 : 1500;
+
+  // Update label text below keyboard
+  if (kbModeLabel) {
+    kbModeLabel.textContent = quickType ? "⚡ QuickType" : "🕊 Precision";
+  }
+});
+
    
   // ---------- Save Dropdown ----------
   if (saveMenu) saveMenu.classList.add("hidden");
