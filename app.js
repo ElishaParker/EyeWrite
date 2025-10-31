@@ -35,21 +35,43 @@ document.addEventListener('mousemove',e=>{
 });
 
 // ---------- Dwell ring ----------
-function startDwell(el){
-  if(debounce)return;
+function startDwell(el) {
+  if (debounce) return;
+
+  // Only trigger if hover mode is active and element is actionable
+  if (!hoverMode || !el.matches('button,select,input')) return;
+
   ring.classList.remove('hidden');
-  const dwellTime=quickType?700:1500;
-  ring.style.animation=`ringFill ${dwellTime}ms linear forwards`;
-  dwellTimer=setTimeout(()=>{el.click();},dwellTime);
+  const dwellTime = quickType ? 700 : 1500;
+
+  // reset any previous animation
+  ring.style.animation = 'none';
+  void ring.offsetWidth; // force reflow
+  ring.style.animation = `ringFill ${dwellTime}ms linear forwards`;
+
+  dwellTimer = setTimeout(() => {
+    el.click();
+  }, dwellTime);
 }
-function endDwell(){ring.classList.add('hidden');clearTimeout(dwellTimer);}
-function registerHoverables(){
-  document.querySelectorAll('button,select,input').forEach(el=>{
-    el.addEventListener('mouseenter',()=>startDwell(el));
-    el.addEventListener('mouseleave',endDwell);
+
+function endDwell() {
+  ring.classList.add('hidden');
+  clearTimeout(dwellTimer);
+}
+
+// Attach hover listeners to all actionable elements (buttons, selects, inputs)
+function registerHoverables() {
+  document.querySelectorAll('button, select, input').forEach(el => {
+    el.onmouseenter = () => startDwell(el);
+    el.onmouseleave = endDwell;
   });
 }
+
+// Initial registration and re-registration for dynamic content (keyboard rebuilds, etc.)
 registerHoverables();
+const observer = new MutationObserver(() => registerHoverables());
+observer.observe(document.body, { childList: true, subtree: true });
+
 
 // ---------- Keyboard builder ----------
 function buildKeyboard(){
