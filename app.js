@@ -172,57 +172,75 @@ quickTypeBtn.addEventListener("click", () => {
 });
 
    
-  // ---------- Save Dropdown ----------
-  if (saveMenu) saveMenu.classList.add("hidden");
-  if (saveBtn) {
-    saveBtn.addEventListener("click", e => {
-      e.stopPropagation();
-      const visible = !saveMenu.classList.contains("hidden");
-      document.querySelectorAll(".saveMenu").forEach(m => m.classList.add("hidden"));
-      if (!visible) saveMenu.classList.remove("hidden");
-    });
-  }
-  saveMenu?.querySelectorAll("button").forEach(b => {
+// ---------- Save Dropdown ----------
+const saveBtn = document.getElementById("saveBtn");
+const saveMenu = document.getElementById("saveMenu");
+
+// ensure dropdown starts hidden
+if (saveMenu) saveMenu.classList.add("hidden");
+
+if (saveBtn && saveMenu) {
+  saveBtn.addEventListener("click", e => {
+    e.stopPropagation();
+
+    // toggle open/close
+    const visible = !saveMenu.classList.contains("hidden");
+
+    // hide all open menus before showing this one
+    document.querySelectorAll("#saveMenu").forEach(m => m.classList.add("hidden"));
+
+    if (!visible) saveMenu.classList.remove("hidden");
+  });
+
+  // handle file format button clicks
+  saveMenu.querySelectorAll("button").forEach(b => {
     b.addEventListener("click", e => {
       e.stopPropagation();
       saveMenu.classList.add("hidden");
       saveFile(b.dataset.format);
     });
   });
+
+  // hide dropdown when clicking outside
   document.addEventListener("click", e => {
-    if (!saveBtn.contains(e.target) && !saveMenu.contains(e.target))
+    if (!saveBtn.contains(e.target) && !saveMenu.contains(e.target)) {
       saveMenu.classList.add("hidden");
+    }
   });
+}
 
-  function saveFile(fmt) {
-    const name = prompt("Enter file name:", "EyeWrite-note");
-    if (!name) return;
-    const text = textBox.innerText;
+// ---------- Save Logic ----------
+function saveFile(fmt) {
+  const name = prompt("Enter file name:", "EyeWrite-note");
+  if (!name) return;
+  const text = document.getElementById("textArea").innerText;
 
-    if (fmt === "txt") {
-      const blob = new Blob([text], { type: "text/plain" });
+  if (fmt === "txt") {
+    const blob = new Blob([text], { type: "text/plain" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `${name}.txt`;
+    a.click();
+  } else if (fmt === "pdf") {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: "p", unit: "pt", format: "a4" });
+    const lines = pdf.splitTextToSize(text, 500);
+    pdf.text(lines, 40, 60);
+    pdf.save(`${name}.pdf`);
+  } else if (fmt === "docx") {
+    const { Document, Packer, Paragraph, TextRun } = window.docx;
+    const doc = new Document({
+      sections: [{
+        children: text.split("\n")
+          .map(line => new Paragraph({ children: [new TextRun(line)] }))
+      }]
+    });
+    Packer.toBlob(doc).then(blob => {
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = `${name}.txt`;
+      a.download = `${name}.docx`;
       a.click();
-    } else if (fmt === "pdf") {
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({ orientation: "p", unit: "pt", format: "a4" });
-      const lines = pdf.splitTextToSize(text, 500);
-      pdf.text(lines, 40, 60);
-      pdf.save(`${name}.pdf`);
-    } else if (fmt === "docx") {
-      const { Document, Packer, Paragraph, TextRun } = window.docx;
-      const doc = new Document({
-        sections: [{ children: text.split("\n").map(line =>
-          new Paragraph({ children: [new TextRun(line)] })) }]
-      });
-      Packer.toBlob(doc).then(blob => {
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = `${name}.docx`;
-        a.click();
-      });
-    }
+    });
   }
-});
+}
+
