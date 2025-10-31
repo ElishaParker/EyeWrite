@@ -8,24 +8,29 @@
 </head>
 
 <body>
-  <!-- ========== Instruction Overlay ========== -->
+  <!-- ===========================================================
+       🪶  Instruction Overlay  (shown first run, closable)
+       =========================================================== -->
   <div id="instructions" class="overlay hidden">
     <div class="card">
       <h2>👁️ Welcome to EyeWrite</h2>
-      <p>Hands-free gaze and blink-based writing and search interface.</p>
+      <p>Hands-free gaze & blink writing interface.</p>
       <ul>
         <li>🕑 Hold gaze 1.5 s / Double blink → Click</li>
         <li>🔁 Triple blink → Select text</li>
-        <li>🗙 Close keyboard or overlay</li>
-        <li>🔊 Speak text | 🔍 Search web | ⚡ QuickType toggle</li>
-        <li>⬆️ Top bar = Scroll up | ⬇️ Bottom bar = Scroll down</li>
+        <li>🕊 Precision / ⚡ QuickType = blink modes</li>
+        <li>⌨ Keyboard + 🎛 Voice Modulation on toolbar</li>
+        <li>🗙 closes any panel or keyboard</li>
       </ul>
       <button id="closeInstructions">Got it 🗙</button>
     </div>
   </div>
 
-  <!-- ========== Toolbar ========== -->
+  <!-- ===========================================================
+       🧭  Top Toolbar – layout / cursor / keyboard / voice
+       =========================================================== -->
   <header id="toolbar">
+    <!-- Font & formatting -->
     <select id="fontSelect">
       <option>Arial</option><option>Times New Roman</option>
       <option>Courier New</option><option>Verdana</option><option>Georgia</option>
@@ -34,41 +39,68 @@
     <button id="boldBtn"><b>B</b></button>
     <button id="italicBtn"><i>I</i></button>
     <button id="underlineBtn"><u>U</u></button>
+
+    <!-- Layout / cursor / keyboard / voice -->
     <button id="fullBtn">Full ☐</button>
     <button id="halfBtn">Half ▭</button>
-    <button id="cursorMenuBtn">🎯 Cursor</button>
+    <button id="cursorDefault">🖱 Default</button>
+    <button id="cursorCross">✚ Cross</button>
+    <button id="cursorText">🅣 Text</button>
+    <button id="keyboardToggle">⌨ Keyboard</button>
+    <button id="voiceBtn">🎛 Voice Modulation</button>
     <button id="helpBtn">❔</button>
   </header>
 
-  <!-- ========== Scroll Bands + Text Area ========== -->
+  <!-- ===========================================================
+       🧾  Scroll Bands + Editable Text Area
+       =========================================================== -->
   <div id="topScroll" class="scrollBand">⬆️ Scroll Up</div>
   <div id="textArea" contenteditable="true"></div>
   <div id="bottomScroll" class="scrollBand">⬇️ Scroll Down</div>
 
-  <!-- ========== Controls ========== -->
+  <!-- ===========================================================
+       🔍  Bottom Control Bar
+       =========================================================== -->
   <footer id="controls">
     <button id="searchBtn">🔍 Search</button>
     <button id="speakBtn">🔊 Speak</button>
   </footer>
 
-  <!-- ========== On-Screen Keyboard ========== -->
+  <!-- ===========================================================
+       🎹  On-Screen Keyboard (docked below text)
+       =========================================================== -->
   <div id="keyboard" class="hidden">
     <div id="kbHeader">
-      <span id="kbMode">🕊️ Precision</span>
+      <span id="kbMode">🕊 Precision</span>
       <button id="kbToggle">⚡ QuickType</button>
       <button id="kbClose">🗙</button>
     </div>
     <div id="kbKeys"></div>
   </div>
 
-  <!-- ========== Cursor Menu ========== -->
-  <div id="cursorMenu" class="hidden">
-    <button onclick="setCursor('default')">🖱️ Default</button>
-    <button onclick="setCursor('crosshair')">✚ Cross</button>
-    <button onclick="setCursor('text')">🅣 Text</button>
+  <!-- ===========================================================
+       🎛️  Voice Modulation Modal
+       =========================================================== -->
+  <div id="voicePanel" class="overlay hidden">
+    <div class="card">
+      <h2>🎛 Voice Modulation</h2>
+      <label>Voice:
+        <select id="voiceSelect"></select>
+      </label><br/>
+      <label>Speed:
+        <input id="rateSlider" type="range" min="0.5" max="2" step="0.1" value="1">
+      </label><br/>
+      <label>Pitch:
+        <input id="pitchSlider" type="range" min="0.5" max="2" step="0.1" value="1">
+      </label><br/>
+      <button id="voicePreview">🗣 Preview</button>
+      <button id="voiceClose">🗙 Close & Save</button>
+    </div>
   </div>
 
-  <!-- ========== Library + App Scripts ========== -->
+  <!-- ===========================================================
+       🔗  Libraries + App Script
+       =========================================================== -->
   <script src="assets/libs/webgazer.js"></script>
   <script src="assets/libs/mediapipe.min.js"></script>
   <script src="app.js"></script>
