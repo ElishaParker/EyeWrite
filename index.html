@@ -1,53 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EyeWrite – Hands-Free Writing App (Phase 1.5)</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EyeWrite – Hands-Free Writing (Phase 1.6)</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <!-- 🪶 Instructions -->
-  <div id="instructions" class="overlay hidden">
-    <div class="card">
-      <h2>👁️ Welcome to EyeWrite</h2>
-      <p>Hands-free gaze & blink writing interface.</p>
-      <ul>
-        <li>🕑 Hold gaze 1.5 s / Double blink → Click</li>
-        <li>⚡ QuickType = 0.7 s dwell | 🕊 Precision = 1.5 s dwell</li>
-        <li>⌨ Keyboard + 🎛 Voice Modulation on toolbar</li>
-        <li>🗙 closes any panel or keyboard</li>
-      </ul>
-      <button id="closeInstructions">Got it 🗙</button>
-    </div>
-  </div>
-
   <!-- 🧭 Toolbar -->
   <header id="toolbar">
     <select id="fontSelect">
       <option>Arial</option><option>Times New Roman</option>
       <option>Courier New</option><option>Verdana</option><option>Georgia</option>
     </select>
-    <input id="fontSize" type="number" min="8" max="72" value="16" />
+    <input id="fontSize" type="number" min="8" max="72" value="16">
     <button id="boldBtn"><b>B</b></button>
     <button id="italicBtn"><i>I</i></button>
     <button id="underlineBtn"><u>U</u></button>
 
     <button id="fullBtn">Full ☐</button>
     <button id="halfBtn">Half ▭</button>
-    <button id="cursorDefault">🖱 Default</button>
-    <button id="cursorCross">✚ Cross</button>
-    <button id="cursorText">🅣 Text</button>
+    <button id="hoverToggle">Hover ON 🖱</button>
     <button id="keyboardToggle">⌨ Keyboard</button>
     <button id="voiceBtn">🎛 Voice Modulation</button>
-    <button id="helpBtn">❔</button>
   </header>
 
-  <!-- 🧾 Text area -->
-  <div id="topScroll" class="scrollBand">⬆ Scroll Up</div>
+  <!-- ✍ Text area -->
   <div id="textArea" contenteditable="true"></div>
-  <div id="bottomScroll" class="scrollBand">⬇ Scroll Down</div>
 
   <!-- 🔍 Control bar -->
   <footer id="controls">
@@ -62,29 +42,19 @@
       <button id="kbToggle">⚡ QuickType</button>
       <button id="kbClose">🗙</button>
     </div>
-    <div id="kbKeys"></div>
-  </div>
-
-  <!-- 🎛 Voice Modulation -->
-  <div id="voicePanel" class="overlay hidden">
-    <div class="card">
-      <h2>🎛 Voice Modulation</h2>
-      <label>Voice:
-        <select id="voiceSelect"></select>
-      </label><br/>
-      <label>Speed:
-        <input id="rateSlider" type="range" min="0.5" max="2" step="0.1" value="1">
-      </label><br/>
-      <label>Pitch:
-        <input id="pitchSlider" type="range" min="0.5" max="2" step="0.1" value="1">
-      </label><br/>
-      <button id="voicePreview">🗣 Preview</button>
-      <button id="voiceClose">🗙 Close & Save</button>
+    <div id="kbRows">
+      <!-- each row manually defined -->
+      <div class="kbRow" id="row1"></div>
+      <div class="kbRow" id="row2"></div>
+      <div class="kbRow" id="row3"></div>
+      <div class="kbRow" id="row4"></div>
+      <div class="kbRow" id="row5"></div>
     </div>
   </div>
 
-  <script src="assets/libs/webgazer.js"></script>
-  <script src="assets/libs/mediapipe.min.js"></script>
+  <!-- cursor dwell ring -->
+  <div id="cursorRing" class="hidden"></div>
+
   <script src="app.js"></script>
 </body>
 </html>
