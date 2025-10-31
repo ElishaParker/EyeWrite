@@ -169,6 +169,52 @@ function speakWithModulation(text) {
   speechSynthesis.cancel();
   speechSynthesis.speak(u);
 }
+// --- Persistence helpers ---
+function saveVoiceSettings() {
+  localStorage.setItem("voiceSettings", JSON.stringify({
+    voiceIndex: voiceSelect.value,
+    pitch: pitchSlider.value,
+    rate: rateSlider.value
+  }));
+}
+function loadVoiceSettings() {
+  const saved = JSON.parse(localStorage.getItem("voiceSettings") || "{}");
+  if (saved.voiceIndex) voiceSelect.value = saved.voiceIndex;
+  if (saved.pitch) pitchSlider.value = saved.pitch;
+  if (saved.rate) rateSlider.value = saved.rate;
+}
+
+// Restore saved values once voices are loaded
+speechSynthesis.onvoiceschanged = () => {
+  loadVoices();
+  loadVoiceSettings();
+};
+
+// --- Speak with saved modulation ---
+function speakWithModulation(text) {
+  const u = new SpeechSynthesisUtterance(text);
+  u.pitch = parseFloat(pitchSlider.value);
+  u.rate = parseFloat(rateSlider.value);
+  u.voice = availableVoices[voiceSelect.value] || null;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+  saveVoiceSettings(); // persist after each use
+}
+
+// --- Live save when sliders or voice change ---
+[pitchSlider, rateSlider, voiceSelect].forEach(el => {
+  el.addEventListener("input", saveVoiceSettings);
+});
+
+// --- Preview ---
+previewBtn.onclick = () => {
+  speakWithModulation("Testing your saved voice settings.");
+};
+
+// --- Speak button integration ---
+document.getElementById("speakBtn").onclick = () => {
+  speakWithModulation(textBox.innerText || "No text detected.");
+};
 
 // Preview button
 previewBtn.onclick = () => {
