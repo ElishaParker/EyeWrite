@@ -274,22 +274,37 @@ document.getElementById("speakBtn").onclick = () => {
       alert("DOCX export support pending integration.");
     }
   }
-   // ---------- Instructions Modal ----------
+// ---------- Instructions Modal ----------
 const instructionsBtn = document.getElementById("instructionsBtn");
 const instructionsModal = document.getElementById("instructionsModal");
+const instructionsContent = document.getElementById("instructionsContent");
 const closeInstructions = document.getElementById("closeInstructions");
+let hoverCloseTimer = null;
 
+// Open modal
 instructionsBtn.onclick = () => {
   instructionsModal.classList.remove("hidden");
 };
 
+// Close on ESC
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") instructionsModal.classList.add("hidden");
+});
+
+// Close on hover-off for 0.7s
+instructionsContent.addEventListener("mouseleave", () => {
+  hoverCloseTimer = setTimeout(() => {
+    instructionsModal.classList.add("hidden");
+  }, 700);
+});
+instructionsContent.addEventListener("mouseenter", () => {
+  clearTimeout(hoverCloseTimer);
+});
+
+// Manual close
 closeInstructions.onclick = () => {
   instructionsModal.classList.add("hidden");
 };
 
-// Optional: Close with ESC key
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape") instructionsModal.classList.add("hidden");
-});
 
 });
