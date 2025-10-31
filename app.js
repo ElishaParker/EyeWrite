@@ -209,66 +209,45 @@ if (saveBtn && saveMenu) {
   });
 }
 
-// ---------- Save Dropdown ----------
-document.addEventListener("DOMContentLoaded", () => {
-  const saveBtn = document.getElementById("saveBtn");
-  const saveMenu = document.getElementById("saveMenu");
-  const textBox = document.getElementById("textArea");
+/* ================= Save Dropdown ================= */ 
+.saveWrapper {
+  position: relative;
+}
 
-  if (!saveBtn || !saveMenu) return;
+#saveMenu {
+  position: absolute;
+  top: 110%;               /* show directly below the Save button */
+  left: 0;
+  background: #222;
+  border: 1px solid #333;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+}
 
-  saveMenu.classList.add("hidden");
+/* Fade-in when .hidden class is removed by JS */
+#saveMenu:not(.hidden) {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0s;
+}
 
-  saveBtn.addEventListener("click", e => {
-    e.stopPropagation();
-    saveMenu.classList.toggle("hidden");
-  });
-
-  saveMenu.querySelectorAll("button").forEach(b => {
-    b.addEventListener("click", e => {
-      e.stopPropagation();
-      saveMenu.classList.add("hidden");
-      saveFile(b.dataset.format);
-    });
-  });
-
-  document.addEventListener("click", e => {
-    if (!saveBtn.contains(e.target) && !saveMenu.contains(e.target)) {
-      saveMenu.classList.add("hidden");
-    }
-  });
-
-  function saveFile(fmt) {
-    const name = prompt("Enter file name:", "EyeWrite-note");
-    if (!name) return;
-    const text = textBox.innerText;
-
-    if (fmt === "txt") {
-      const blob = new Blob([text], { type: "text/plain" });
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = `${name}.txt`;
-      a.click();
-    } else if (fmt === "pdf") {
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({ orientation: "p", unit: "pt", format: "a4" });
-      const lines = pdf.splitTextToSize(text, 500);
-      pdf.text(lines, 40, 60);
-      pdf.save(`${name}.pdf`);
-    } else if (fmt === "docx") {
-      const { Document, Packer, Paragraph, TextRun } = window.docx;
-      const doc = new Document({
-        sections: [{
-          children: text.split("\n")
-            .map(line => new Paragraph({ children: [new TextRun(line)] }))
-        }]
-      });
-      Packer.toBlob(doc).then(blob => {
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = `${name}.docx`;
-        a.click();
-      });
-    }
-  }
-});
+#saveMenu button {
+  padding: 6px 20px;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-bottom: 1px solid #444;
+}
+#saveMenu button:last-child {
+  border-bottom: none;
+}
+#saveMenu button:hover {
+  background: #555;
+}
