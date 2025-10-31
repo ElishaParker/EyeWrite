@@ -1,23 +1,60 @@
-// ============== CORE ==============
-const textBox=document.getElementById('textArea');
-const kb=document.getElementById('keyboard');
-const ring=document.getElementById('cursorRing');
-let hoverMode=true, quickType=false, shiftOn=false, capsOn=false;
-let dwellTimer=null, dwellTarget=null, dwellActive=false, debounce=false;
+// ============================================================
+// EyeWrite – Phase 1.5 Logic
+// ============================================================
 
-// ============== TOOLBAR ==============
-document.getElementById('hoverToggle').onclick=()=>{
-  hoverMode=!hoverMode;
-  document.getElementById('hoverToggle').textContent=
-    hoverMode?"Hover ON 🖱":"Hover OFF 🚫";
-  ring.classList.add('hidden');
+// ---------- Instructions ----------
+window.addEventListener('load',()=>{
+  if(!localStorage.getItem('instructionsDismissed'))
+    document.getElementById('instructions').classList.remove('hidden');
+  buildKeyboard(); initVoices(); attachGlobalDwell();
+});
+document.getElementById('closeInstructions').onclick=()=>{
+  document.getElementById('instructions').classList.add('hidden');
+  localStorage.setItem('instructionsDismissed',true);
 };
-document.getElementById('keyboardToggle').onclick=()=>kb.classList.toggle('hidden');
-document.getElementById('kbClose').onclick=()=>kb.classList.add('hidden');
-document.getElementById('kbToggle').onclick=()=>{
-  quickType=!quickType;
-  document.getElementById('kbMode').textContent=quickType?'⚡ QuickType':'🕊 Precision';
+document.getElementById('helpBtn').onclick=()=>document.getElementById('instructions').classList.toggle('hidden');
+
+// ---------- Text Autosave ----------
+const textBox=document.getElementById('textArea');
+textBox.innerHTML=localStorage.getItem('textData')||'';
+setInterval(()=>localStorage.setItem('textData',textBox.innerHTML),5000);
+
+// ---------- Formatting ----------
+['fontSelect','fontSize'].forEach(id=>{
+  document.getElementById(id).addEventListener('change',e=>{
+    if(id==='fontSelect')textBox.style.fontFamily=e.target.value;
+    if(id==='fontSize')textBox.style.fontSize=e.target.value+'px';
+  });
+});
+document.getElementById('boldBtn').onclick=()=>document.execCommand('bold');
+document.getElementById('italicBtn').onclick=()=>document.execCommand('italic');
+document.getElementById('underlineBtn').onclick=()=>document.execCommand('underline');
+
+// ---------- Scroll ----------
+document.getElementById('topScroll').onclick=()=>textBox.scrollBy({top:-100,behavior:'smooth'});
+document.getElementById('bottomScroll').onclick=()=>textBox.scrollBy({top:100,behavior:'smooth'});
+
+// ---------- Search ----------
+document.getElementById('searchBtn').onclick=()=>{
+  window.open('https://duckduckgo.com/?q='+encodeURIComponent(textBox.innerText),
+    '_blank',`width=${screen.availWidth/2},height=${screen.availHeight},left=${screen.availWidth/2},top=0`);
 };
+
+// ---------- Speak ----------
+document.getElementById('speakBtn').onclick=()=>{
+  const u=new SpeechSynthesisUtterance(textBox.innerText);
+  u.voice=speechSynthesis.getVoices().find(v=>v.name===localStorage.getItem('voiceName'))||null;
+  u.rate=parseFloat(localStorage.getItem('voiceRate')||1);
+  u.pitch=parseFloat(localStorage.getItem('voicePitch')||1);
+  speechSynthesis.speak(u);
+};
+
+// ---------- Layout / Cursor ----------
+document.getElementById('fullBtn').onclick=()=>document.body.style.width='100%';
+document.getElementById('halfBtn').onclick=()=>document.body.style.width='50%';
+document.getElementById('cursorDefault').onclick=()=>document.body.style.cursor='default';
+document.getElementById('cursorCross').onclick=()=>document.body.style.cursor='crosshair';
+document.getElementById('cursorText').onclick=()=>document.body.style.cursor='text';
 
 // ============== CURSOR RING ==============
 document.addEventListener('mousemove',e=>{
@@ -101,12 +138,38 @@ function formatChar(k){
 }
 function insert(c){document.execCommand('insertText',false,c);}
 
-// ============== SPEAK & SEARCH (same as before) ==============
-document.getElementById('speakBtn').onclick=()=>{
-  const u=new SpeechSynthesisUtterance(textBox.innerText);
+// ============================================================
+// 🎛 Voice Panel
+// ============================================================
+const voicePanel=document.getElementById('voicePanel');
+document.getElementById('voiceBtn').onclick=()=>voicePanel.classList.remove('hidden');
+document.getElementById('voiceClose').onclick=()=>{
+  localStorage.setItem('voiceName',document.getElementById('voiceSelect').value);
+  localStorage.setItem('voiceRate',document.getElementById('rateSlider').value);
+  localStorage.setItem('voicePitch',document.getElementById('pitchSlider').value);
+  voicePanel.classList.add('hidden');
+};
+document.getElementById('voicePreview').onclick=()=>{
+  const u=new SpeechSynthesisUtterance("This is a voice test.");
+  const v=speechSynthesis.getVoices();
+  u.voice=v.find(x=>x.name===document.getElementById('voiceSelect').value);
+  u.rate=parseFloat(document.getElementById('rateSlider').value);
+  u.pitch=parseFloat(document.getElementById('pitchSlider').value);
   speechSynthesis.speak(u);
 };
-document.getElementById('searchBtn').onclick=()=>{
-  window.open('https://duckduckgo.com/?q='+encodeURIComponent(textBox.innerText),
-  '_blank',`width=${screen.availWidth/2},height=${screen.availHeight},left=${screen.availWidth/2},top=0`);
-};
+function initVoices(){
+  const sel=document.getElementById('voiceSelect');
+  const load=()=>{
+    const v=speechSynthesis.getVoices();
+    sel.innerHTML='';
+    v.forEach(x=>{
+      const o=document.createElement('option');
+      o.value=x.name;o.textContent=x.name;
+      if(x.name===localStorage.getItem('voiceName'))o.selected=true;
+      sel.appendChild(o);
+    });
+  };
+  load();speechSynthesis.onvoiceschanged=load;
+  document.getElementById('rateSlider').value=localStorage.getItem('voiceRate')||1;
+  document.getElementById('pitchSlider').value=localStorage.getItem('voicePitch')||1;
+}
