@@ -1,12 +1,12 @@
-/* ============================================================
-   EyeWrite – Phase 1.4 Logic
-   ============================================================ */
+// ============================================================
+// EyeWrite – Phase 1.5 Logic
+// ============================================================
 
 // ---------- Instructions ----------
 window.addEventListener('load',()=>{
-  const instr=document.getElementById('instructions');
-  if(!localStorage.getItem('instructionsDismissed'))instr.classList.remove('hidden');
-  buildKeyboard(); initVoices();
+  if(!localStorage.getItem('instructionsDismissed'))
+    document.getElementById('instructions').classList.remove('hidden');
+  buildKeyboard(); initVoices(); attachGlobalDwell();
 });
 document.getElementById('closeInstructions').onclick=()=>{
   document.getElementById('instructions').classList.add('hidden');
@@ -14,12 +14,18 @@ document.getElementById('closeInstructions').onclick=()=>{
 };
 document.getElementById('helpBtn').onclick=()=>document.getElementById('instructions').classList.toggle('hidden');
 
-// ---------- Text & Formatting ----------
+// ---------- Text Autosave ----------
 const textBox=document.getElementById('textArea');
 textBox.innerHTML=localStorage.getItem('textData')||'';
 setInterval(()=>localStorage.setItem('textData',textBox.innerHTML),5000);
-document.getElementById('fontSelect').onchange=e=>textBox.style.fontFamily=e.target.value;
-document.getElementById('fontSize').onchange=e=>textBox.style.fontSize=e.target.value+'px';
+
+// ---------- Formatting ----------
+['fontSelect','fontSize'].forEach(id=>{
+  document.getElementById(id).addEventListener('change',e=>{
+    if(id==='fontSelect')textBox.style.fontFamily=e.target.value;
+    if(id==='fontSize')textBox.style.fontSize=e.target.value+'px';
+  });
+});
 document.getElementById('boldBtn').onclick=()=>document.execCommand('bold');
 document.getElementById('italicBtn').onclick=()=>document.execCommand('italic');
 document.getElementById('underlineBtn').onclick=()=>document.execCommand('underline');
@@ -36,11 +42,11 @@ document.getElementById('searchBtn').onclick=()=>{
 
 // ---------- Speak ----------
 document.getElementById('speakBtn').onclick=()=>{
-  const utter=new SpeechSynthesisUtterance(textBox.innerText);
-  utter.voice=speechSynthesis.getVoices().find(v=>v.name===localStorage.getItem('voiceName'))||null;
-  utter.rate=parseFloat(localStorage.getItem('voiceRate')||1);
-  utter.pitch=parseFloat(localStorage.getItem('voicePitch')||1);
-  speechSynthesis.speak(utter);
+  const u=new SpeechSynthesisUtterance(textBox.innerText);
+  u.voice=speechSynthesis.getVoices().find(v=>v.name===localStorage.getItem('voiceName'))||null;
+  u.rate=parseFloat(localStorage.getItem('voiceRate')||1);
+  u.pitch=parseFloat(localStorage.getItem('voicePitch')||1);
+  speechSynthesis.speak(u);
 };
 
 // ---------- Layout / Cursor ----------
@@ -51,88 +57,96 @@ document.getElementById('cursorCross').onclick=()=>document.body.style.cursor='c
 document.getElementById('cursorText').onclick=()=>document.body.style.cursor='text';
 
 // ============================================================
-// 🎹 Keyboard logic
+// 🎹 Keyboard Logic
 // ============================================================
 const kb=document.getElementById('keyboard');
 const kbKeys=document.getElementById('kbKeys');
-let quickType=false, shiftOn=false;
-document.getElementById('keyboardToggle').onclick=()=>kb.classList.toggle('hidden');
-document.getElementById('kbClose').onclick=()=>kb.classList.add('hidden');
+let quickType=false,shiftOn=false,capsOn=false;
+document.getElementById('keyboardToggle').onclick=()=>toggleKeyboard();
+document.getElementById('kbClose').onclick=()=>closeKeyboard();
 document.getElementById('kbToggle').onclick=()=>{
   quickType=!quickType;
   document.getElementById('kbMode').textContent=quickType?'⚡ QuickType':'🕊 Precision';
 };
+function toggleKeyboard(){
+  kb.classList.toggle('hidden');
+  document.getElementById('textArea').style.flex=kb.classList.contains('hidden')?'1':'0.5';
+}
+function closeKeyboard(){
+  kb.classList.add('hidden');
+  document.getElementById('textArea').style.flex='1';
+}
 
 function buildKeyboard(){
   kbKeys.innerHTML='';
   const rows=[
     ['`','1','2','3','4','5','6','7','8','9','0','-','=','⌫'],
-    ['Q','W','E','R','T','Y','U','I','O','P','[',']','\\'],
-    ['A','S','D','F','G','H','J','K','L',';','\'','↵'],
-    ['⇧','Z','X','C','V','B','N','M',',','.','/','↑'],
-    ['←','␣','→','↓']
+    ['Tab','Q','W','E','R','T','Y','U','I','O','P','[',']','\\'],
+    ['Caps','A','S','D','F','G','H','J','K','L',';','\'','↵'],
+    ['Shift','Z','X','C','V','B','N','M',',','.','/','↑'],
+    ['Ctrl','␣','Alt','←','↓','→']
   ];
-  rows.forEach(row=>{
-    row.forEach(ch=>{
-      const btn=document.createElement('button');
-      btn.textContent=ch;
-      btn.dataset.key=ch;
-      addDwell(btn);
-      btn.onclick=()=>keyAction(ch);
-      kbKeys.appendChild(btn);
+  rows.forEach(r=>{
+    r.forEach(k=>{
+      const b=document.createElement('button');
+      b.textContent=k;b.dataset.key=k;
+      addDwell(b);b.onclick=()=>keyAction(k);
+      kbKeys.appendChild(b);
     });
   });
 }
 
-// ---------- Key actions ----------
-function keyAction(key){
-  if(key==='␣'){insertChar(' ');}
-  else if(key==='↵'){insertChar('\n');}
-  else if(key==='⌫'){backspace();}
-  else if(key==='⇧'){shiftOn=!shiftOn;}
-  else if(key==='↑'){moveCaret('up');}
-  else if(key==='↓'){moveCaret('down');}
-  else if(key==='←'){moveCaret('left');}
-  else if(key==='→'){moveCaret('right');}
-  else{insertChar(shiftOn?key.toUpperCase():key.toLowerCase());}
+// ---------- Key Actions ----------
+function keyAction(k){
+  if(k==='␣')insertChar(' ');
+  else if(k==='↵')insertChar('\n');
+  else if(k==='⌫')backspace();
+  else if(k==='Shift'){shiftOn=true;setTimeout(()=>shiftOn=false,1500);}
+  else if(k==='Caps'){capsOn=!capsOn;}
+  else if(k==='Tab')insertChar('    '); // 4 spaces
+  else if(['↑','↓','←','→'].includes(k))moveCaret(k);
+  else if(k==='Ctrl'||k==='Alt')return;
+  else insertChar(formatChar(k));
 }
-
-function insertChar(c){
-  document.execCommand('insertText',false,c);
+function formatChar(k){
+  const base=k.length===1?k:k.charAt(0);
+  if(shiftOn^capsOn)return base.toUpperCase();
+  return base.toLowerCase();
 }
-function backspace(){
-  document.execCommand('delete');
-}
+function insertChar(c){document.execCommand('insertText',false,c);}
+function backspace(){document.execCommand('delete');}
 function moveCaret(dir){
   const sel=window.getSelection();
   if(!sel.rangeCount)return;
   const range=sel.getRangeAt(0);
   const node=textBox.firstChild||textBox;
-  const pos=range.startOffset;
-  if(dir==='left')range.setStart(node,pos>0?pos-1:0);
-  if(dir==='right')range.setStart(node,pos+1);
+  let pos=range.startOffset;
+  if(dir==='←')pos=Math.max(0,pos-1);
+  if(dir==='→')pos=pos+1;
+  range.setStart(node,pos);
   sel.removeAllRanges();sel.addRange(range);
 }
 
 // ============================================================
-// 🕒 Dwell logic with soft ring
+// 🕒 Dwell Ring Logic (global)
 // ============================================================
 function addDwell(el){
   el.addEventListener('pointerenter',()=>{
     const dwellTime=quickType?700:1500;
     el.style.setProperty('--dwellTime',dwellTime+'ms');
     const ring=document.createElement('div');
-    ring.className='dwell-ring';
-    el.appendChild(ring);
+    ring.className='dwell-ring';el.appendChild(ring);
     const t=setTimeout(()=>{el.click();},dwellTime);
-    el.addEventListener('pointerleave',()=>{
-      clearTimeout(t);if(ring)ring.remove();
-    },{once:true});
+    el.addEventListener('pointerleave',()=>{clearTimeout(t);ring.remove();},{once:true});
   });
+}
+function attachGlobalDwell(){
+  document.querySelectorAll('button,select,input[type=number],.scrollBand')
+    .forEach(el=>addDwell(el));
 }
 
 // ============================================================
-// 🎛 Voice panel
+// 🎛 Voice Panel
 // ============================================================
 const voicePanel=document.getElementById('voicePanel');
 document.getElementById('voiceBtn').onclick=()=>voicePanel.classList.remove('hidden');
@@ -144,8 +158,8 @@ document.getElementById('voiceClose').onclick=()=>{
 };
 document.getElementById('voicePreview').onclick=()=>{
   const u=new SpeechSynthesisUtterance("This is a voice test.");
-  const voices=speechSynthesis.getVoices();
-  u.voice=voices.find(v=>v.name===document.getElementById('voiceSelect').value);
+  const v=speechSynthesis.getVoices();
+  u.voice=v.find(x=>x.name===document.getElementById('voiceSelect').value);
   u.rate=parseFloat(document.getElementById('rateSlider').value);
   u.pitch=parseFloat(document.getElementById('pitchSlider').value);
   speechSynthesis.speak(u);
@@ -153,12 +167,12 @@ document.getElementById('voicePreview').onclick=()=>{
 function initVoices(){
   const sel=document.getElementById('voiceSelect');
   const load=()=>{
-    const voices=speechSynthesis.getVoices();
+    const v=speechSynthesis.getVoices();
     sel.innerHTML='';
-    voices.forEach(v=>{
+    v.forEach(x=>{
       const o=document.createElement('option');
-      o.value=v.name;o.textContent=v.name;
-      if(v.name===localStorage.getItem('voiceName'))o.selected=true;
+      o.value=x.name;o.textContent=x.name;
+      if(x.name===localStorage.getItem('voiceName'))o.selected=true;
       sel.appendChild(o);
     });
   };
