@@ -3,41 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EyeWrite</title>
+  <title>EyeWrite – Hands-Free Writing App</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+  <!-- ========== Instruction Overlay ========== -->
   <div id="instructions" class="overlay hidden">
     <div class="card">
       <h2>👁️ Welcome to EyeWrite</h2>
+      <p>Hands-free gaze and blink-based writing and search interface.</p>
       <ul>
-        <li>Double blink / 1.5 s gaze → Click</li>
-        <li>Triple blink → Select text</li>
-        <li>Gaze top-left → Cursor menu</li>
-        <li>Gaze 1.5 s on text → Open keyboard</li>
-        <li>Top / bottom banners → Scroll</li>
-        <li>🗙 = Close keyboard / overlay</li>
+        <li>🕑 Hold gaze 1.5 s / Double blink → Click</li>
+        <li>🔁 Triple blink → Select text</li>
+        <li>🗙 Close keyboard or overlay</li>
+        <li>🔊 Speak text | 🔍 Search web | ⚡ QuickType toggle</li>
+        <li>⬆️ Top bar = Scroll up | ⬇️ Bottom bar = Scroll down</li>
       </ul>
       <button id="closeInstructions">Got it 🗙</button>
     </div>
   </div>
+
+  <!-- ========== Toolbar ========== -->
   <header id="toolbar">
     <select id="fontSelect">
       <option>Arial</option><option>Times New Roman</option>
       <option>Courier New</option><option>Verdana</option><option>Georgia</option>
     </select>
     <input id="fontSize" type="number" min="8" max="72" value="16" />
-    <button id="boldBtn">B</button><button id="italicBtn">I</button><button id="underlineBtn">U</button>
-    <button id="fullBtn">Full ☐</button><button id="halfBtn">Half ▭</button>
+    <button id="boldBtn"><b>B</b></button>
+    <button id="italicBtn"><i>I</i></button>
+    <button id="underlineBtn"><u>U</u></button>
+    <button id="fullBtn">Full ☐</button>
+    <button id="halfBtn">Half ▭</button>
+    <button id="cursorMenuBtn">🎯 Cursor</button>
     <button id="helpBtn">❔</button>
   </header>
-  <div id="topScroll"></div>
+
+  <!-- ========== Scroll Bands + Text Area ========== -->
+  <div id="topScroll" class="scrollBand">⬆️ Scroll Up</div>
   <div id="textArea" contenteditable="true"></div>
-  <div id="bottomScroll"></div>
+  <div id="bottomScroll" class="scrollBand">⬇️ Scroll Down</div>
+
+  <!-- ========== Controls ========== -->
   <footer id="controls">
     <button id="searchBtn">🔍 Search</button>
     <button id="speakBtn">🔊 Speak</button>
   </footer>
+
+  <!-- ========== On-Screen Keyboard ========== -->
   <div id="keyboard" class="hidden">
     <div id="kbHeader">
       <span id="kbMode">🕊️ Precision</span>
@@ -46,6 +60,15 @@
     </div>
     <div id="kbKeys"></div>
   </div>
+
+  <!-- ========== Cursor Menu ========== -->
+  <div id="cursorMenu" class="hidden">
+    <button onclick="setCursor('default')">🖱️ Default</button>
+    <button onclick="setCursor('crosshair')">✚ Cross</button>
+    <button onclick="setCursor('text')">🅣 Text</button>
+  </div>
+
+  <!-- ========== Library + App Scripts ========== -->
   <script src="assets/libs/webgazer.js"></script>
   <script src="assets/libs/mediapipe.min.js"></script>
   <script src="app.js"></script>
