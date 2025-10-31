@@ -99,10 +99,15 @@ button:hover {
   top: 0;
   border-bottom: 1px solid #333;
 }
+.scrollBtn {
+  background: rgba(34, 34, 34, 0.9);
+  pointer-events: auto;
+  z-index: 50; /* ensures above text but below modals */
+}
 
 #scrollDown {
   position: fixed;                     /* ensures it stays visible */
-  bottom: calc(40vh + 4px);            /* anchors just above keyboard */
+  bottom: calc(40vh);            /* anchors just above keyboard */
   left: 0;
   width: 100%;
   border-top: 1px solid #333;
