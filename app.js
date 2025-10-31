@@ -274,4 +274,22 @@ document.getElementById("speakBtn").onclick = () => {
       alert("DOCX export support pending integration.");
     }
   }
+   // ---------- Instructions Modal ----------
+const instructionsBtn = document.getElementById("instructionsBtn");
+const instructionsModal = document.getElementById("instructionsModal");
+const closeInstructions = document.getElementById("closeInstructions");
+
+instructionsBtn.onclick = () => {
+  instructionsModal.classList.remove("hidden");
+};
+
+closeInstructions.onclick = () => {
+  instructionsModal.classList.add("hidden");
+};
+
+// Optional: Close with ESC key
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") instructionsModal.classList.add("hidden");
+});
+
 });
