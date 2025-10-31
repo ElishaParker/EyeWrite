@@ -246,7 +246,23 @@ button:hover {
 .modalContent button:hover {
   background: #555;
 }
-
+/* Toolbar Instructions Button */
+#instructionsBtn {
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+  width: auto;              /* fixes full-width issue */
+  display: inline-block;    /* keeps it next to Save */
+}
+#instructionsBtn:hover {
+  background: #444;
+  box-shadow: 0 0 5px rgba(255,255,255,0.2);
+}
 /* ================= On-Screen Keyboard ================= */
 #keyboard {
   background: #1e1e1e;
