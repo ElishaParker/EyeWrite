@@ -94,10 +94,21 @@ button:hover {
   background: #444;
   box-shadow: 0 0 4px rgba(255,255,255,0.2);
 }
-#scrollUp { top: 0; border-bottom: 1px solid #333; }
+
+#scrollUp {
+  top: 0;
+  border-bottom: 1px solid #333;
+}
+
 #scrollDown {
-  bottom: calc(40vh + 4px); /* lifts just above keyboard */
+  position: fixed;                     /* ensures it stays visible */
+  bottom: calc(40vh + 4px);            /* anchors just above keyboard */
+  left: 0;
+  width: 100%;
   border-top: 1px solid #333;
+  z-index: 30;                         /* sits above text but below hover ring */
+  background: rgba(34, 34, 34, 0.9);   /* consistent with top scroll bar */
+  backdrop-filter: blur(4px);
 }
 
 
