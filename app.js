@@ -2,6 +2,9 @@
    EyeWrite v1.6.2 — Stability & Hover Mode Patch
    Includes: Scrollbar controls, Hover toggle, Toolbar & Save fixes
    ============================================================ */
+window.addEventListener('load', () => {
+  console.log("EyeWrite fully loaded ✅");
+});
 
 // ---------- Initialization ----------
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,7 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
   let hoverMode = true, dwellTimer = null, debounce = false;
 
   // ---------- Toolbar Controls ----------
-  document.getElementById('keyboardToggle').onclick = () => kb.classList.toggle('hidden');
+document.getElementById('keyboardToggle').addEventListener('click', () => {
+  kb.classList.toggle('hidden');
+  kb.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  console.log('Keyboard toggled:', !kb.classList.contains('hidden'));
+});
+
   document.getElementById('kbClose').onclick = () => kb.classList.add('hidden');
   document.getElementById('kbToggle').onclick = () => {
     quickType = !quickType;
