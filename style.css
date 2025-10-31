@@ -36,7 +36,7 @@ button:hover{background:#444;}
 #keyboard{
   background:#1e1e1e;border-top:1px solid #444;
   padding:6px;display:flex;flex-direction:column;
-  height:50vh;z-index:400;
+  height:40vh;z-index:400;
 }
 #kbHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
 .kbRow{display:flex;justify-content:center;gap:4px;margin:2px 0;}
