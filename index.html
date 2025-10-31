@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EyeWrite – Hands-Free Writing (Phase 1.6)</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EyeWrite — Hands-Free Writing App (Phase 1.6)</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- lightweight libs for export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.1.1/docx.min.js"></script>
 </head>
 
 <body>
@@ -14,14 +17,16 @@
       <option>Arial</option><option>Times New Roman</option>
       <option>Courier New</option><option>Verdana</option><option>Georgia</option>
     </select>
-    <input id="fontSize" type="number" min="8" max="72" value="16">
+    <input id="fontSize" type="number" min="8" max="72" value="16" />
     <button id="boldBtn"><b>B</b></button>
     <button id="italicBtn"><i>I</i></button>
     <button id="underlineBtn"><u>U</u></button>
 
     <button id="fullBtn">Full ☐</button>
     <button id="halfBtn">Half ▭</button>
-    <button id="hoverToggle">Hover ON 🖱</button>
+    <button id="cursorDefault">🖱 Default</button>
+    <button id="cursorCross">✚ Cross</button>
+    <button id="cursorText">🅣 Text</button>
     <button id="keyboardToggle">⌨ Keyboard</button>
     <button id="voiceBtn">🎛 Voice Modulation</button>
   </header>
@@ -33,6 +38,14 @@
   <footer id="controls">
     <button id="searchBtn">🔍 Search</button>
     <button id="speakBtn">🔊 Speak</button>
+    <div class="saveWrapper">
+      <button id="saveBtn">💾 Save</button>
+      <div id="saveMenu" class="hidden">
+        <button data-format="txt">TXT</button>
+        <button data-format="docx">DOCX</button>
+        <button data-format="pdf">PDF</button>
+      </div>
+    </div>
   </footer>
 
   <!-- 🎹 Keyboard -->
@@ -43,7 +56,6 @@
       <button id="kbClose">🗙</button>
     </div>
     <div id="kbRows">
-      <!-- each row manually defined -->
       <div class="kbRow" id="row1"></div>
       <div class="kbRow" id="row2"></div>
       <div class="kbRow" id="row3"></div>
@@ -52,7 +64,7 @@
     </div>
   </div>
 
-  <!-- cursor dwell ring -->
+  <!-- dwell ring -->
   <div id="cursorRing" class="hidden"></div>
 
   <script src="app.js"></script>
