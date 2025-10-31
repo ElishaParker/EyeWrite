@@ -11,6 +11,16 @@ document.addEventListener("DOMContentLoaded", () => {
   let quickType = false, shiftOn = false, capsOn = false;
   let hoverMode = true, dwellTimer = null, debounce = false;
 
+// ---------- Cursor Mode Controls ----------
+document.getElementById("cursorDefault").onclick = () => {
+  textBox.style.cursor = "default";
+};
+document.getElementById("cursorCross").onclick = () => {
+  textBox.style.cursor = "crosshair";
+};
+document.getElementById("cursorText").onclick = () => {
+  textBox.style.cursor = "text";
+};
 
 
   // ---------- Hover Toggle ----------
