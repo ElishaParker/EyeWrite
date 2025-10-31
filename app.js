@@ -1,27 +1,19 @@
 /* ============================================================
-   EyeWrite v1.6.4 — Stable Layout + Hover + Save Patch
+   EyeWrite v1.6.4 — Stable Layout + Hover + Save Patch (Clean)
    ============================================================ */
 document.addEventListener("DOMContentLoaded", () => {
   const textBox = document.getElementById("textArea");
   const ring = document.getElementById("cursorRing");
-  const kb = document.getElementById("keyboard");
   const hoverBtn = document.getElementById("hoverToggle");
   const saveBtn = document.getElementById("saveBtn");
   const saveMenu = document.getElementById("saveMenu");
   let quickType = false, shiftOn = false, capsOn = false;
   let hoverMode = true, dwellTimer = null, debounce = false;
 
-// ---------- Cursor Mode Controls ----------
-document.getElementById("cursorDefault").onclick = () => {
-  textBox.style.cursor = "default";
-};
-document.getElementById("cursorCross").onclick = () => {
-  textBox.style.cursor = "crosshair";
-};
-document.getElementById("cursorText").onclick = () => {
-  textBox.style.cursor = "text";
-};
-
+  // ---------- Cursor Mode Controls ----------
+  document.getElementById("cursorDefault").onclick = () => (textBox.style.cursor = "default");
+  document.getElementById("cursorCross").onclick = () => (textBox.style.cursor = "crosshair");
+  document.getElementById("cursorText").onclick = () => (textBox.style.cursor = "text");
 
   // ---------- Hover Toggle ----------
   hoverBtn.onclick = () => {
@@ -31,8 +23,8 @@ document.getElementById("cursorText").onclick = () => {
   };
 
   // ---------- Font & Formatting ----------
-  document.getElementById("fontSelect").onchange = e => textBox.style.fontFamily = e.target.value;
-  document.getElementById("fontSize").onchange = e => textBox.style.fontSize = e.target.value + "px";
+  document.getElementById("fontSelect").onchange = e => (textBox.style.fontFamily = e.target.value);
+  document.getElementById("fontSize").onchange = e => (textBox.style.fontSize = e.target.value + "px");
   document.getElementById("boldBtn").onclick = () => document.execCommand("bold");
   document.getElementById("italicBtn").onclick = () => document.execCommand("italic");
   document.getElementById("underlineBtn").onclick = () => document.execCommand("underline");
@@ -41,7 +33,7 @@ document.getElementById("cursorText").onclick = () => {
   textBox.innerHTML = localStorage.getItem("textData") || "";
   setInterval(() => localStorage.setItem("textData", textBox.innerHTML), 5000);
 
-  // ---------- Scroll Bars ----------
+  // ---------- Scroll Buttons ----------
   const scrollStep = 150;
   document.getElementById("scrollUp").onclick = () =>
     textBox.scrollBy({ top: -scrollStep, behavior: "smooth" });
@@ -55,23 +47,22 @@ document.getElementById("cursorText").onclick = () => {
   });
 
   function startDwell(el) {
-  if (debounce || !hoverMode) return;
-  if (!el.matches("button,select,input")) return;
+    if (debounce || !hoverMode) return;
+    if (!el.matches("button,select,input")) return;
 
-  ring.classList.remove("hidden");
-  const dwellTime = quickType ? 700 : 1500; // synced with mode
-  ring.style.animation = "none";
-  void ring.offsetWidth;
-  ring.style.animation = `ringFill ${dwellTime}ms linear forwards`;
-  dwellTimer = setTimeout(() => {
-    el.click();
-  }, dwellTime);
-}
+    ring.classList.remove("hidden");
+    const dwellTime = quickType ? 700 : 1500;
+    ring.style.animation = "none";
+    void ring.offsetWidth;
+    ring.style.animation = `ringFill ${dwellTime}ms linear forwards`;
+    dwellTimer = setTimeout(() => el.click(), dwellTime);
+  }
 
   function endDwell() {
     ring.classList.add("hidden");
     clearTimeout(dwellTimer);
   }
+
   function registerHoverables() {
     document.querySelectorAll("button,select,input").forEach(el => {
       el.onmouseenter = () => startDwell(el);
@@ -110,14 +101,14 @@ document.getElementById("cursorText").onclick = () => {
 
   function keyAction(k) {
     if (debounce) return;
-    debounce = true; setTimeout(() => debounce = false, 200);
+    debounce = true; setTimeout(() => (debounce = false), 200);
     switch (k) {
       case "␣": insert(" "); break;
       case "↵": insert("\n"); break;
       case "⌫": document.execCommand("delete"); break;
       case "Tab": insert("    "); break;
       case "Caps": capsOn = !capsOn; break;
-      case "Shift": shiftOn = true; setTimeout(() => shiftOn = false, 800); break;
+      case "Shift": shiftOn = true; setTimeout(() => (shiftOn = false), 800); break;
       default: insert(formatChar(k));
     }
   }
@@ -125,129 +116,66 @@ document.getElementById("cursorText").onclick = () => {
     const base = k.length === 1 ? k : k.charAt(0);
     return (shiftOn ^ capsOn) ? base.toUpperCase() : base.toLowerCase();
   }
-  function insert(c) { document.execCommand("insertText", false, c); }
+  function insert(c) {
+    document.execCommand("insertText", false, c);
+  }
 
   // ---------- Search & Speak ----------
-  document.getElementById("searchBtn").onclick = () => {
-    window.open(
-      "https://duckduckgo.com/?q=" + encodeURIComponent(textBox.innerText),
+  document.getElementById("searchBtn").onclick = () =>
+    window.open(`https://duckduckgo.com/?q=${encodeURIComponent(textBox.innerText)}`,
       "_blank",
-      `width=${screen.availWidth / 2},height=${screen.availHeight},left=${screen.availWidth / 2},top=0`
-    );
-  };
+      `width=${screen.availWidth / 2},height=${screen.availHeight},left=${screen.availWidth / 2},top=0`);
   document.getElementById("speakBtn").onclick = () => {
     const u = new SpeechSynthesisUtterance(textBox.innerText);
     speechSynthesis.speak(u);
   };
 
-   // ---------- QuickType Button ----------
-// ---------- QuickType Button ----------
+  // ---------- Voice Modulation Placeholder ----------
+  document.getElementById("voiceBtn").onclick = () =>
+    alert("Voice modulation feature coming soon!");
 
-// ---------- Hover Speed Mode Toggle ----------
-document.getElementById('kbToggle').onclick = () => {
-  quickType = !quickType;
-  document.getElementById('kbMode').textContent = quickType
-    ? '⚡ QuickType'
-    : '🕊 Precision';
-};
+  // ---------- QuickType Toggle ----------
+  document.getElementById("kbToggle").onclick = () => {
+    quickType = !quickType;
+    document.getElementById("kbMode").textContent = quickType ? "⚡ QuickType" : "🕊 Precision";
+  };
 
+  // ---------- Save Dropdown ----------
+  if (saveMenu) saveMenu.classList.add("hidden");
+  if (saveBtn && saveMenu) {
+    saveBtn.addEventListener("click", e => {
+      e.stopPropagation();
+      saveMenu.classList.toggle("hidden");
+    });
 
-   // Also update the keyboard mode label dynamically
-const kbModeLabel = document.getElementById("kbModeText");
-if (kbModeLabel) {
-  kbModeLabel.textContent = quickType ? "⚡ QuickType" : "🕊 Precision";
-}
+    saveMenu.querySelectorAll("button").forEach(b => {
+      b.addEventListener("click", e => {
+        e.stopPropagation();
+        saveMenu.classList.add("hidden");
+        saveFile(b.dataset.format);
+      });
+    });
 
-quickTypeBtn.addEventListener("click", () => {
-  quickType = !quickType;
-  quickTypeBtn.textContent = quickType ? "⚡ QuickType" : "🕊 Precision";
+    document.addEventListener("click", e => {
+      if (!saveBtn.contains(e.target) && !saveMenu.contains(e.target))
+        saveMenu.classList.add("hidden");
+    });
+  }
 
-  // Adjust dwell timing dynamically
-  dwellTime = quickType ? 700 : 1500;
-
-  // Update label text below keyboard
-  if (kbModeLabel) {
-    kbModeLabel.textContent = quickType ? "⚡ QuickType" : "🕊 Precision";
+  function saveFile(fmt) {
+    const name = prompt("Enter file name:", "EyeWrite-note");
+    if (!name) return;
+    const text = textBox.innerText;
+    if (fmt === "txt") {
+      const blob = new Blob([text], { type: "text/plain" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `${name}.txt`;
+      a.click();
+    } else if (fmt === "pdf") {
+      alert("PDF export support pending integration.");
+    } else if (fmt === "docx") {
+      alert("DOCX export support pending integration.");
+    }
   }
 });
-
-   
-// ---------- Save Dropdown ----------
-const saveBtn = document.getElementById("saveBtn");
-const saveMenu = document.getElementById("saveMenu");
-
-// ensure dropdown starts hidden
-if (saveMenu) saveMenu.classList.add("hidden");
-
-if (saveBtn && saveMenu) {
-  saveBtn.addEventListener("click", e => {
-    e.stopPropagation();
-
-    // toggle open/close
-    const visible = !saveMenu.classList.contains("hidden");
-
-    // hide all open menus before showing this one
-    document.querySelectorAll("#saveMenu").forEach(m => m.classList.add("hidden"));
-
-    if (!visible) saveMenu.classList.remove("hidden");
-  });
-
-  // handle file format button clicks
-  saveMenu.querySelectorAll("button").forEach(b => {
-    b.addEventListener("click", e => {
-      e.stopPropagation();
-      saveMenu.classList.add("hidden");
-      saveFile(b.dataset.format);
-    });
-  });
-
-  // hide dropdown when clicking outside
-  document.addEventListener("click", e => {
-    if (!saveBtn.contains(e.target) && !saveMenu.contains(e.target)) {
-      saveMenu.classList.add("hidden");
-    }
-  });
-}
-
-/* ================= Save Dropdown ================= */ 
-.saveWrapper {
-  position: relative;
-}
-
-#saveMenu {
-  position: absolute;
-  top: 110%;               /* show directly below the Save button */
-  left: 0;
-  background: #222;
-  border: 1px solid #333;
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  z-index: 100;
-  visibility: hidden;
-  opacity: 0;
-  transform: translateY(-5px);
-  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
-}
-
-/* Fade-in when .hidden class is removed by JS */
-#saveMenu:not(.hidden) {
-  visibility: visible;
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 0s;
-}
-
-#saveMenu button {
-  padding: 6px 20px;
-  background: #333;
-  color: #fff;
-  border: none;
-  border-bottom: 1px solid #444;
-}
-#saveMenu button:last-child {
-  border-bottom: none;
-}
-#saveMenu button:hover {
-  background: #555;
-}
