@@ -3,14 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EyeWrite – Hands-Free Writing App (Phase 1.4)</title>
+  <title>EyeWrite – Hands-Free Writing App (Phase 1.5)</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <!-- =========================================================
-       🪶  Instruction Overlay
-       ========================================================= -->
+  <!-- 🪶 Instructions -->
   <div id="instructions" class="overlay hidden">
     <div class="card">
       <h2>👁️ Welcome to EyeWrite</h2>
@@ -25,9 +23,7 @@
     </div>
   </div>
 
-  <!-- =========================================================
-       🧭  Toolbar
-       ========================================================= -->
+  <!-- 🧭 Toolbar -->
   <header id="toolbar">
     <select id="fontSelect">
       <option>Arial</option><option>Times New Roman</option>
@@ -48,38 +44,28 @@
     <button id="helpBtn">❔</button>
   </header>
 
-  <!-- =========================================================
-       🧾  Text area with scroll bands
-       ========================================================= -->
+  <!-- 🧾 Text area -->
   <div id="topScroll" class="scrollBand">⬆ Scroll Up</div>
   <div id="textArea" contenteditable="true"></div>
   <div id="bottomScroll" class="scrollBand">⬇ Scroll Down</div>
 
-  <!-- =========================================================
-       🔍  Control bar
-       ========================================================= -->
+  <!-- 🔍 Control bar -->
   <footer id="controls">
     <button id="searchBtn">🔍 Search</button>
     <button id="speakBtn">🔊 Speak</button>
   </footer>
 
-  <!-- =========================================================
-       🎹  Keyboard – full unified board (⅓ screen)
-       ========================================================= -->
+  <!-- 🎹 Keyboard -->
   <div id="keyboard" class="hidden">
     <div id="kbHeader">
       <span id="kbMode">🕊 Precision</span>
       <button id="kbToggle">⚡ QuickType</button>
       <button id="kbClose">🗙</button>
     </div>
-
-    <!-- Keyboard rows built by JS -->
     <div id="kbKeys"></div>
   </div>
 
-  <!-- =========================================================
-       🎛️  Voice Modulation Panel
-       ========================================================= -->
+  <!-- 🎛 Voice Modulation -->
   <div id="voicePanel" class="overlay hidden">
     <div class="card">
       <h2>🎛 Voice Modulation</h2>
