@@ -182,58 +182,76 @@ if (scrollUpBtn && scrollDownBtn && textBox) {
     speechSynthesis.speak(u);
   };
 
-  // ---------- Save Dropdown ----------
-  const saveBtn = document.getElementById('saveBtn');
-  const saveMenu = document.getElementById('saveMenu');
-  saveMenu.classList.add('hidden');
+  // ---------- Save Dropdown (v1.6.3) ----------
+const saveBtn = document.getElementById('saveBtn');
+const saveMenu = document.getElementById('saveMenu');
 
-  saveBtn.onclick = e => {
+// Start hidden on load
+if (saveMenu) saveMenu.classList.add('hidden');
+
+// Open/close on Save button click
+if (saveBtn) {
+  saveBtn.addEventListener('click', e => {
     e.stopPropagation();
-    saveMenu.classList.toggle('hidden');
-  };
-  saveMenu.querySelectorAll('button').forEach(b => {
-    b.onclick = e => {
-      e.stopPropagation();
-      saveMenu.classList.add('hidden');
-      saveFile(b.dataset.format);
-    };
+    const isVisible = !saveMenu.classList.contains('hidden');
+    // Hide any open dropdowns first
+    document.querySelectorAll('.saveWrapper .saveMenu, #saveMenu').forEach(m => m.classList.add('hidden'));
+    // Then toggle this one
+    if (!isVisible) saveMenu.classList.remove('hidden');
   });
-  document.addEventListener('click', () => {
-    if (!saveMenu.classList.contains('hidden')) saveMenu.classList.add('hidden');
+}
+
+// Handle each format button click
+saveMenu?.querySelectorAll('button').forEach(b => {
+  b.addEventListener('click', e => {
+    e.stopPropagation();
+    saveMenu.classList.add('hidden');
+    saveFile(b.dataset.format);
   });
+});
 
-  function saveFile(fmt) {
-    const name = prompt('Enter file name:', 'EyeWrite-note');
-    if (!name) return;
-    const text = textBox.innerText;
-
-    if (fmt === 'txt') {
-      const blob = new Blob([text], { type: 'text/plain' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = name + '.txt';
-      a.click();
-    } else if (fmt === 'pdf') {
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
-      const lines = pdf.splitTextToSize(text, 500);
-      pdf.text(lines, 40, 60);
-      pdf.save(name + '.pdf');
-    } else if (fmt === 'docx') {
-      const { Document, Packer, Paragraph, TextRun } = window.docx;
-      const doc = new Document({
-        sections: [{ children: text.split('\n').map(line =>
-          new Paragraph({ children: [new TextRun(line)] })) }]
-      });
-      Packer.toBlob(doc).then(blob => {
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = name + '.docx';
-        a.click();
-      });
-    }
+// Hide dropdown if user clicks anywhere else
+document.addEventListener('click', e => {
+  if (!saveBtn.contains(e.target) && !saveMenu.contains(e.target)) {
+    saveMenu.classList.add('hidden');
   }
 });
+
+// Save logic
+function saveFile(fmt) {
+  const name = prompt('Enter file name:', 'EyeWrite-note');
+  if (!name) return;
+  const text = textBox.innerText;
+
+  if (fmt === 'txt') {
+    const blob = new Blob([text], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${name}.txt`;
+    a.click();
+  } else if (fmt === 'pdf') {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
+    const lines = pdf.splitTextToSize(text, 500);
+    pdf.text(lines, 40, 60);
+    pdf.save(`${name}.pdf`);
+  } else if (fmt === 'docx') {
+    const { Document, Packer, Paragraph, TextRun } = window.docx;
+    const doc = new Document({
+      sections: [{
+        children: text.split('\n').map(line =>
+          new Paragraph({ children: [new TextRun(line)] }))
+      }]
+    });
+    Packer.toBlob(doc).then(blob => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${name}.docx`;
+      a.click();
+    });
+  }
+}
+
 // --- Safety Rebind ---
 ['fullBtn','halfBtn','cursorDefault','cursorCross','cursorText','hoverToggle','keyboardToggle','voiceBtn','searchBtn','speakBtn','saveBtn']
 .forEach(id=>{
