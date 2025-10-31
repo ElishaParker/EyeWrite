@@ -69,11 +69,28 @@ document.getElementById('keyboardToggle').addEventListener('click', () => {
   textBox.innerHTML = localStorage.getItem('textData') || '';
   setInterval(() => localStorage.setItem('textData', textBox.innerHTML), 5000);
 
-  // ---------- Scroll Buttons ----------
-  document.getElementById('scrollUp').onclick = () =>
-    textBox.scrollBy({ top: -100, behavior: 'smooth' });
-  document.getElementById('scrollDown').onclick = () =>
-    textBox.scrollBy({ top: 100, behavior: 'smooth' });
+// ---------- Scroll Buttons (v1.6.3) ----------
+const scrollUpBtn = document.getElementById('scrollUp');
+const scrollDownBtn = document.getElementById('scrollDown');
+const scrollStep = 150; // adjustable scroll distance per click
+
+// Safety: ensure buttons exist before binding
+if (scrollUpBtn && scrollDownBtn && textBox) {
+  scrollUpBtn.addEventListener('click', () => {
+    textBox.scrollBy({
+      top: -scrollStep,
+      behavior: 'smooth'
+    });
+  });
+
+  scrollDownBtn.addEventListener('click', () => {
+    textBox.scrollBy({
+      top: scrollStep,
+      behavior: 'smooth'
+    });
+  });
+}
+
 
   // ---------- Cursor Dwell Ring ----------
   document.addEventListener('mousemove', e => {
