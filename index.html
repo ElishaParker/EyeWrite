@@ -3,22 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EyeWrite – Hands-Free Writing App</title>
+  <title>EyeWrite – Hands-Free Writing App (Phase 1.4)</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <!-- ===========================================================
-       🪶  Instruction Overlay  (shown first run, closable)
-       =========================================================== -->
+  <!-- =========================================================
+       🪶  Instruction Overlay
+       ========================================================= -->
   <div id="instructions" class="overlay hidden">
     <div class="card">
       <h2>👁️ Welcome to EyeWrite</h2>
       <p>Hands-free gaze & blink writing interface.</p>
       <ul>
         <li>🕑 Hold gaze 1.5 s / Double blink → Click</li>
-        <li>🔁 Triple blink → Select text</li>
-        <li>🕊 Precision / ⚡ QuickType = blink modes</li>
+        <li>⚡ QuickType = 0.7 s dwell | 🕊 Precision = 1.5 s dwell</li>
         <li>⌨ Keyboard + 🎛 Voice Modulation on toolbar</li>
         <li>🗙 closes any panel or keyboard</li>
       </ul>
@@ -26,11 +25,10 @@
     </div>
   </div>
 
-  <!-- ===========================================================
-       🧭  Top Toolbar – layout / cursor / keyboard / voice
-       =========================================================== -->
+  <!-- =========================================================
+       🧭  Toolbar
+       ========================================================= -->
   <header id="toolbar">
-    <!-- Font & formatting -->
     <select id="fontSelect">
       <option>Arial</option><option>Times New Roman</option>
       <option>Courier New</option><option>Verdana</option><option>Georgia</option>
@@ -40,7 +38,6 @@
     <button id="italicBtn"><i>I</i></button>
     <button id="underlineBtn"><u>U</u></button>
 
-    <!-- Layout / cursor / keyboard / voice -->
     <button id="fullBtn">Full ☐</button>
     <button id="halfBtn">Half ▭</button>
     <button id="cursorDefault">🖱 Default</button>
@@ -51,36 +48,38 @@
     <button id="helpBtn">❔</button>
   </header>
 
-  <!-- ===========================================================
-       🧾  Scroll Bands + Editable Text Area
-       =========================================================== -->
-  <div id="topScroll" class="scrollBand">⬆️ Scroll Up</div>
+  <!-- =========================================================
+       🧾  Text area with scroll bands
+       ========================================================= -->
+  <div id="topScroll" class="scrollBand">⬆ Scroll Up</div>
   <div id="textArea" contenteditable="true"></div>
-  <div id="bottomScroll" class="scrollBand">⬇️ Scroll Down</div>
+  <div id="bottomScroll" class="scrollBand">⬇ Scroll Down</div>
 
-  <!-- ===========================================================
-       🔍  Bottom Control Bar
-       =========================================================== -->
+  <!-- =========================================================
+       🔍  Control bar
+       ========================================================= -->
   <footer id="controls">
     <button id="searchBtn">🔍 Search</button>
     <button id="speakBtn">🔊 Speak</button>
   </footer>
 
-  <!-- ===========================================================
-       🎹  On-Screen Keyboard (docked below text)
-       =========================================================== -->
+  <!-- =========================================================
+       🎹  Keyboard – full unified board (⅓ screen)
+       ========================================================= -->
   <div id="keyboard" class="hidden">
     <div id="kbHeader">
       <span id="kbMode">🕊 Precision</span>
       <button id="kbToggle">⚡ QuickType</button>
       <button id="kbClose">🗙</button>
     </div>
+
+    <!-- Keyboard rows built by JS -->
     <div id="kbKeys"></div>
   </div>
 
-  <!-- ===========================================================
-       🎛️  Voice Modulation Modal
-       =========================================================== -->
+  <!-- =========================================================
+       🎛️  Voice Modulation Panel
+       ========================================================= -->
   <div id="voicePanel" class="overlay hidden">
     <div class="card">
       <h2>🎛 Voice Modulation</h2>
@@ -98,9 +97,6 @@
     </div>
   </div>
 
-  <!-- ===========================================================
-       🔗  Libraries + App Script
-       =========================================================== -->
   <script src="assets/libs/webgazer.js"></script>
   <script src="assets/libs/mediapipe.min.js"></script>
   <script src="app.js"></script>
