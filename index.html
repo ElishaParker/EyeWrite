@@ -3,57 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EyeWrite — Hands-Free Writing App (v1.6.2 Stability Patch)</title>
-
-  <!-- === EyeWrite v1.6.2 — Stability & Hover Mode Patch === -->
-  <!-- Includes: Scrollbar restoration, Hover-Mode toggle, Toolbar/Keyboard fixes -->
+  <title>EyeWrite v1.6.4</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.1.1/docx.min.js"></script>
 </head>
-
 <body>
-  <!-- 🧭 Toolbar -->
-  <header id="toolbar">
+  <!-- ================= Toolbar ================= -->
+  <div id="toolbar">
     <select id="fontSelect">
-      <option>Arial</option>
-      <option>Times New Roman</option>
-      <option>Courier New</option>
-      <option>Verdana</option>
-      <option>Georgia</option>
+      <option value="Arial">Arial</option>
+      <option value="Times New Roman">Times New Roman</option>
+      <option value="Courier New">Courier New</option>
+      <option value="Verdana">Verdana</option>
+      <option value="Georgia">Georgia</option>
     </select>
-    <input id="fontSize" type="number" min="8" max="72" value="16" />
+    <select id="fontSize">
+      <option value="12">12</option>
+      <option value="14">14</option>
+      <option value="16" selected>16</option>
+      <option value="20">20</option>
+      <option value="24">24</option>
+    </select>
     <button id="boldBtn"><b>B</b></button>
     <button id="italicBtn"><i>I</i></button>
     <button id="underlineBtn"><u>U</u></button>
-
-    <!-- View Controls -->
     <button id="fullBtn">Full ☐</button>
     <button id="halfBtn">Half ▭</button>
-
-    <!-- Cursor Controls -->
-    <button id="cursorDefault">🖱 Default</button>
-    <button id="cursorCross">✚ Cross</button>
-    <button id="cursorText">🅣 Text</button>
-    <button id="hoverToggle">🌀 Hover ON</button>
-
-    <!-- Tools -->
-    <button id="voiceBtn">🎛 Voice Modulation</button>
-  </header>
-
-  <!-- ✍ Main Writing Area -->
-  <div id="textContainer">
-    <button id="scrollUp" class="scrollBtn">▲</button>
-    <div id="textArea" contenteditable="true"></div>
-    <button id="scrollDown" class="scrollBtn">▼</button>
-  </div>
-
-  <!-- 🔍 Control Bar -->
-  <footer id="controls">
+    <button id="cursorDefault">Cursor ▣</button>
+    <button id="cursorCross">Cross ✛</button>
+    <button id="cursorText">Text ✎</button>
+    <button id="hoverToggle" class="active">🌀 Hover ON</button>
+    <button id="voiceBtn">Voice Modulation</button>
     <button id="searchBtn">🔍 Search</button>
     <button id="speakBtn">🔊 Speak</button>
-
-    <!-- Save dropdown -->
     <div class="saveWrapper">
       <button id="saveBtn">💾 Save</button>
       <div id="saveMenu" class="hidden">
@@ -62,28 +43,31 @@
         <button data-format="pdf">PDF</button>
       </div>
     </div>
-  </footer>
-
-  <!-- 🎹 On-Screen Keyboard -->
-  <div id="keyboard" class="hidden">
-    <div id="kbHeader">
-      <span id="kbMode">🕊 Precision</span>
-      <button id="kbToggle">⚡ QuickType</button>
-     
-    </div>
-    <div id="kbRows">
-      <div class="kbRow" id="row1"></div>
-      <div class="kbRow" id="row2"></div>
-      <div class="kbRow" id="row3"></div>
-      <div class="kbRow" id="row4"></div>
-      <div class="kbRow" id="row5"></div>
-    </div>
   </div>
 
-  <!-- Cursor dwell ring -->
+  <!-- ================= Text Container ================= -->
+  <div id="textContainer">
+    <button id="scrollUp" class="scrollBtn">▲ Scroll Up</button>
+    <div id="textArea" contenteditable="true"></div>
+    <button id="scrollDown" class="scrollBtn">▼ Scroll Down</button>
+  </div>
+
+  <!-- ================= On-Screen Keyboard ================= -->
+  <div id="keyboard">
+    <div id="kbHeader">
+      <span id="kbMode">🕊 Precision</span>
+    </div>
+    <div class="kbRow" id="row1"></div>
+    <div class="kbRow" id="row2"></div>
+    <div class="kbRow" id="row3"></div>
+    <div class="kbRow" id="row4"></div>
+    <div class="kbRow" id="row5"></div>
+  </div>
+
+  <!-- ================= Cursor Ring ================= -->
   <div id="cursorRing" class="hidden"></div>
 
-  <script defer src="app.js"></script>
-
+  <!-- ================= Scripts ================= -->
+  <script src="app.js"></script>
 </body>
 </html>
