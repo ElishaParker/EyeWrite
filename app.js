@@ -6,12 +6,48 @@ let quickType=false,shiftOn=false,capsOn=false,hoverMode=true;
 let dwellTimer=null,debounce=false;
 
 // ---------- Core toolbar ----------
-document.getElementById('keyboardToggle').onclick=()=>kb.classList.toggle('hidden');
-document.getElementById('kbClose').onclick=()=>kb.classList.add('hidden');
-document.getElementById('kbToggle').onclick=()=>{
-  quickType=!quickType;
-  document.getElementById('kbMode').textContent=quickType?'⚡ QuickType':'🕊 Precision';
+const kb = document.getElementById('keyboard');
+const textBox = document.getElementById('textArea');
+
+// ✅ Keyboard open / close
+document.getElementById('keyboardToggle').onclick = () => {
+  kb.classList.toggle('hidden');
 };
+document.getElementById('kbClose').onclick = () => kb.classList.add('hidden');
+
+// ✅ QuickType toggle
+document.getElementById('kbToggle').onclick = () => {
+  quickType = !quickType;
+  document.getElementById('kbMode').textContent = quickType ? '⚡ QuickType' : '🕊 Precision';
+};
+
+// ✅ Screen resize buttons
+document.getElementById('fullBtn').onclick = () => {
+  window.moveTo(0, 0);
+  window.resizeTo(screen.availWidth, screen.availHeight);
+};
+
+document.getElementById('halfBtn').onclick = () => {
+  window.moveTo(0, 0);
+  window.resizeTo(screen.availWidth / 2, screen.availHeight);
+};
+
+// ✅ Cursor style buttons
+document.getElementById('cursorDefault').onclick = () => {
+  textBox.style.cursor = 'default';
+};
+document.getElementById('cursorCross').onclick = () => {
+  textBox.style.cursor = 'crosshair';
+};
+document.getElementById('cursorText').onclick = () => {
+  textBox.style.cursor = 'text';
+};
+
+// ✅ Voice Modulation (placeholder for now)
+document.getElementById('voiceBtn').onclick = () => {
+  alert('Voice Modulation controls coming soon.');
+};
+
 
 // ---------- Formatting + autosave ----------
 ['fontSelect','fontSize'].forEach(id=>{
