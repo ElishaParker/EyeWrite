@@ -135,6 +135,41 @@ document.getElementById("cursorText").onclick = () => {
     speechSynthesis.speak(u);
   };
 
+   // ---------- QuickType Button ----------
+const quickTypeBtn = document.getElementById("quickTypeBtn");
+
+if (quickTypeBtn) {
+  quickTypeBtn.addEventListener("click", () => {
+    const lastWord = textBox.innerText.trim().split(/\s+/).pop() || "";
+    let suggestion = "";
+
+    // Simple predictive assist — expand based on context
+    switch (lastWord.toLowerCase()) {
+      case "hello":
+        suggestion = "world!";
+        break;
+      case "thank":
+        suggestion = "you very much!";
+        break;
+      case "how":
+        suggestion = "are you feeling today?";
+        break;
+      default:
+        suggestion = "✨ Keep writing your thoughts freely.";
+    }
+
+    // Insert suggestion
+    textBox.innerText += (textBox.innerText.endsWith(" ") ? "" : " ") + suggestion;
+    const range = document.createRange();
+    const sel = window.getSelection();
+    range.selectNodeContents(textBox);
+    range.collapse(false);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  });
+}
+
+   
   // ---------- Save Dropdown ----------
   if (saveMenu) saveMenu.classList.add("hidden");
   if (saveBtn) {
