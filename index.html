@@ -32,6 +32,16 @@
     <button id="kbToggle">⚡ QuickType</button>
     <button id="hoverToggle" class="active">🌀 Hover ON</button>
     <button id="voiceBtn">Voice Modulation</button>
+    <div id="voiceControls" class="hidden">
+  <label>Voice:</label>
+  <select id="voiceSelect"></select>
+  <label>Pitch:</label>
+  <input type="range" id="pitchSlider" min="0.5" max="2" value="1" step="0.1">
+  <label>Rate:</label>
+  <input type="range" id="rateSlider" min="0.5" max="2" value="1" step="0.1">
+  <button id="previewVoice">Preview</button>
+</div>
+
     <button id="searchBtn">🔍 Search</button>
     <button id="speakBtn">🔊 Speak</button>
     <div class="saveWrapper">
