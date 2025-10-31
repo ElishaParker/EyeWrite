@@ -130,6 +130,56 @@ document.addEventListener("DOMContentLoaded", () => {
     speechSynthesis.speak(u);
   };
 
+   // ---------- Voice Modulation ----------
+const voiceBtn = document.getElementById("voiceBtn");
+const voiceControls = document.getElementById("voiceControls");
+const voiceSelect = document.getElementById("voiceSelect");
+const pitchSlider = document.getElementById("pitchSlider");
+const rateSlider = document.getElementById("rateSlider");
+const previewBtn = document.getElementById("previewVoice");
+
+let availableVoices = [];
+
+// Populate voices dynamically when browser loads them
+function loadVoices() {
+  availableVoices = speechSynthesis.getVoices();
+  voiceSelect.innerHTML = "";
+  availableVoices.forEach((v, i) => {
+    const opt = document.createElement("option");
+    opt.value = i;
+    opt.textContent = `${v.name} (${v.lang})`;
+    voiceSelect.appendChild(opt);
+  });
+}
+loadVoices();
+if (speechSynthesis.onvoiceschanged !== undefined)
+  speechSynthesis.onvoiceschanged = loadVoices;
+
+// Toggle visibility of control panel
+voiceBtn.onclick = () => {
+  voiceControls.classList.toggle("hidden");
+};
+
+// Speak function with modulation
+function speakWithModulation(text) {
+  const u = new SpeechSynthesisUtterance(text);
+  u.pitch = parseFloat(pitchSlider.value);
+  u.rate = parseFloat(rateSlider.value);
+  u.voice = availableVoices[voiceSelect.value] || null;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+
+// Preview button
+previewBtn.onclick = () => {
+  speakWithModulation("Testing voice modulation parameters.");
+};
+
+// Update existing Speak button to use modulation
+document.getElementById("speakBtn").onclick = () => {
+  speakWithModulation(textBox.innerText || "No text detected.");
+};
+
   // ---------- Voice Modulation Placeholder ----------
   document.getElementById("voiceBtn").onclick = () =>
     alert("Voice modulation feature coming soon!");
