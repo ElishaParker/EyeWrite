@@ -65,7 +65,7 @@ See [`LICENSE`](LICENSE) for details.
 ## 🧩 Credits
 Created by **Elisha Blue Parker**  
 GitHub → [elishaparker/EyeWrite](https://github.com/elishaparker/EyeWrite)  
-Email → iamvibration@protonmail.com  
+Email → elishaparker@hotmail.com  
 
 “Written with eyes, guided by intention.”
 
