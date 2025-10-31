@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EyeWrite — Hands-Free Writing App (Phase 1.6)</title>
+  <title>EyeWrite — Hands-Free Writing App (v1.6.2 Stability Patch)</title>
+
+  <!-- === EyeWrite v1.6.2 — Stability & Hover Mode Patch === -->
+  <!-- Includes: Scrollbar restoration, Hover-Mode toggle, Toolbar/Keyboard fixes -->
   <link rel="stylesheet" href="style.css" />
-  <!-- lightweight libs for export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.1.1/docx.min.js"></script>
 </head>
@@ -14,30 +16,45 @@
   <!-- 🧭 Toolbar -->
   <header id="toolbar">
     <select id="fontSelect">
-      <option>Arial</option><option>Times New Roman</option>
-      <option>Courier New</option><option>Verdana</option><option>Georgia</option>
+      <option>Arial</option>
+      <option>Times New Roman</option>
+      <option>Courier New</option>
+      <option>Verdana</option>
+      <option>Georgia</option>
     </select>
     <input id="fontSize" type="number" min="8" max="72" value="16" />
     <button id="boldBtn"><b>B</b></button>
     <button id="italicBtn"><i>I</i></button>
     <button id="underlineBtn"><u>U</u></button>
 
+    <!-- View Controls -->
     <button id="fullBtn">Full ☐</button>
     <button id="halfBtn">Half ▭</button>
+
+    <!-- Cursor Controls -->
     <button id="cursorDefault">🖱 Default</button>
     <button id="cursorCross">✚ Cross</button>
     <button id="cursorText">🅣 Text</button>
+    <button id="hoverToggle">🌀 Hover ON</button>
+
+    <!-- Tools -->
     <button id="keyboardToggle">⌨ Keyboard</button>
     <button id="voiceBtn">🎛 Voice Modulation</button>
   </header>
 
-  <!-- ✍ Text area -->
-  <div id="textArea" contenteditable="true"></div>
+  <!-- ✍ Main Writing Area -->
+  <div id="textContainer">
+    <button id="scrollUp" class="scrollBtn">▲</button>
+    <div id="textArea" contenteditable="true"></div>
+    <button id="scrollDown" class="scrollBtn">▼</button>
+  </div>
 
-  <!-- 🔍 Control bar -->
+  <!-- 🔍 Control Bar -->
   <footer id="controls">
     <button id="searchBtn">🔍 Search</button>
     <button id="speakBtn">🔊 Speak</button>
+
+    <!-- Save dropdown -->
     <div class="saveWrapper">
       <button id="saveBtn">💾 Save</button>
       <div id="saveMenu" class="hidden">
@@ -48,7 +65,7 @@
     </div>
   </footer>
 
-  <!-- 🎹 Keyboard -->
+  <!-- 🎹 On-Screen Keyboard -->
   <div id="keyboard" class="hidden">
     <div id="kbHeader">
       <span id="kbMode">🕊 Precision</span>
@@ -64,7 +81,7 @@
     </div>
   </div>
 
-  <!-- dwell ring -->
+  <!-- Cursor dwell ring -->
   <div id="cursorRing" class="hidden"></div>
 
   <script src="app.js"></script>
