@@ -176,6 +176,29 @@ button:hover {
   background: #555;
 }
 
+#voiceControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  background: #222;
+  padding: 6px;
+  border-top: 1px solid #333;
+}
+#voiceControls label {
+  font-size: 14px;
+  color: #ccc;
+}
+#voiceControls select, #voiceControls input, #voiceControls button {
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 6px;
+}
+#voiceControls button:hover {
+  background: #555;
+}
 
 /* ================= On-Screen Keyboard ================= */
 #keyboard {
