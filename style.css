@@ -1,67 +1,88 @@
-/* ===========================================================
-   🌗  Core Layout
-   =========================================================== */
+/* =========================================================
+   🌗  Layout
+   ========================================================= */
 body {
   margin:0; background:#111; color:#eee;
   font-family:Arial, sans-serif;
   display:flex; flex-direction:column; height:100vh;
 }
 
-/* ---------- Toolbar / Footer ---------- */
-#toolbar, #controls {
-  display:flex; flex-wrap:wrap; justify-content:center; align-items:center;
-  gap:8px; padding:8px; background:#222;
+/* Toolbar / Footer ribbons */
+#toolbar,#controls{
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+  gap:8px;padding:8px;background:#222;
 }
-#toolbar button, #controls button, select, input[type=number] {
-  background:#333; color:#fff; border:none;
-  padding:6px 10px; border-radius:6px; cursor:pointer;
+#toolbar button,#controls button,select,input[type=number]{
+  background:#333;color:#fff;border:none;
+  padding:6px 10px;border-radius:6px;cursor:pointer;
 }
-#toolbar button:hover, #controls button:hover { background:#444; }
+#toolbar button:hover,#controls button:hover{background:#444;}
 
-/* ---------- Text Area ---------- */
-#textArea {
-  flex:1; overflow-y:auto; overflow-x:hidden;
-  padding:1rem; font-size:16px; outline:none;
-  background:#181818; border-top:1px solid #333; border-bottom:1px solid #333;
-}
-
-/* ---------- Scroll Bands ---------- */
-.scrollBand {
-  height:24px; text-align:center; background:#202020;
-  color:#666; font-size:12px; user-select:none;
-}
-.scrollBand:hover { color:#fff; background:#333; }
-
-/* ---------- Keyboard Dock ---------- */
-#keyboard {
-  background:#1e1e1e; border-top:1px solid #444;
-  padding:10px; position:relative;
-}
-#kbHeader { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
-#kbKeys {
-  display:grid; grid-template-columns:repeat(auto-fill, minmax(40px,1fr));
-  gap:4px;
-}
-#kbKeys button {
-  background:#333; color:#eee; border:none; border-radius:6px;
-  padding:10px; font-size:16px; cursor:pointer;
-}
-#kbKeys button:hover, #kbKeys button.active { background:#555; }
-
-/* ---------- Overlay / Modals ---------- */
-.overlay {
-  position:fixed; top:0; left:0; right:0; bottom:0;
-  background:rgba(0,0,0,0.7); display:flex;
-  justify-content:center; align-items:center; z-index:1000;
-}
-.overlay .card {
-  background:#fff; color:#000; padding:20px;
-  border-radius:12px; max-width:420px; text-align:left;
-}
-.overlay button {
-  background:#000; color:#fff; border:none;
-  border-radius:6px; padding:8px 12px; margin-top:10px; cursor:pointer;
+/* Text area */
+#textArea{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  padding:1rem;font-size:16px;outline:none;
+  background:#181818;border-top:1px solid #333;border-bottom:1px solid #333;
 }
 
-/* ---------- Hidden Utility ---------- */
-.hidden { display:none; }
+/* Scroll bands */
+.scrollBand{
+  height:24px;text-align:center;background:#202020;color:#666;
+  font-size:12px;user-select:none;
+}
+.scrollBand:hover{color:#fff;background:#333;}
+
+/* =========================================================
+   🎹  Keyboard
+   ========================================================= */
+#keyboard{
+  background:#1e1e1e;border-top:1px solid #444;
+  padding:8px;display:flex;flex-direction:column;
+  height:33vh; /* one third of viewport */
+}
+#kbHeader{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:6px;
+}
+#kbKeys{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(40px,1fr));
+  gap:4px;flex:1;overflow-y:auto;
+}
+#kbKeys button{
+  position:relative;
+  background:#333;color:#eee;border:none;border-radius:6px;
+  padding:10px;font-size:15px;cursor:pointer;
+  transition:background 0.2s;
+}
+#kbKeys button:hover,#kbKeys button.active{background:#555;}
+
+/* Dwell ring overlay */
+.dwell-ring{
+  position:absolute;top:4px;left:4px;
+  width:calc(100% - 8px);height:calc(100% - 8px);
+  border-radius:50%;border:2px solid rgba(255,255,255,0.5);
+  animation:fillRing var(--dwellTime) linear forwards;
+}
+@keyframes fillRing{
+  0%{transform:scale(0);opacity:0.4;}
+  100%{transform:scale(1);opacity:0;}
+}
+
+/* =========================================================
+   🎛  Modals / Overlays
+   ========================================================= */
+.overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,0.7);
+  display:flex;justify-content:center;align-items:center;z-index:1000;
+}
+.overlay .card{
+  background:#fff;color:#000;padding:20px;border-radius:12px;
+  max-width:420px;text-align:left;
+}
+.overlay button{
+  background:#000;color:#fff;border:none;border-radius:6px;
+  padding:8px 12px;margin-top:10px;cursor:pointer;
+}
+.hidden{display:none;}
