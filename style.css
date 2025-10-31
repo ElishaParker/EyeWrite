@@ -199,6 +199,10 @@ button:hover {
 #voiceControls button:hover {
   background: #555;
 }
+/* Hide the Voice Modulation button (but keep logic intact) */
+#voiceBtn {
+  display: none !important;
+}
 
 /* ================= On-Screen Keyboard ================= */
 #keyboard {
