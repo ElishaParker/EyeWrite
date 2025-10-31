@@ -217,3 +217,12 @@ document.getElementById('keyboardToggle').addEventListener('click', () => {
     }
   }
 });
+// --- Safety Rebind ---
+['fullBtn','halfBtn','cursorDefault','cursorCross','cursorText','hoverToggle','keyboardToggle','voiceBtn','searchBtn','speakBtn','saveBtn']
+.forEach(id=>{
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.addEventListener('click', e=>{
+    console.log(`Clicked ${id}`);
+  });
+});
