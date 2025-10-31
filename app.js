@@ -144,16 +144,13 @@ document.getElementById("cursorText").onclick = () => {
 // ---------- QuickType Button ----------
 
 // ---------- Hover Speed Mode Toggle ----------
-const quickTypeBtn = document.getElementById("quickTypeBtn");
-if (quickTypeBtn) {
-  quickTypeBtn.addEventListener("click", () => {
-    quickType = !quickType;
-    quickTypeBtn.textContent = quickType ? "⚡ QuickType" : "🕊 Precision";
+document.getElementById('kbToggle').onclick = () => {
+  quickType = !quickType;
+  document.getElementById('kbMode').textContent = quickType
+    ? '⚡ QuickType'
+    : '🕊 Precision';
+};
 
-    // Adjust dwell timing dynamically
-    dwellTime = quickType ? 700 : 1500;
-  });
-}
 
    // Also update the keyboard mode label dynamically
 const kbModeLabel = document.getElementById("kbModeText");
