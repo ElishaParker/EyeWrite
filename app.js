@@ -55,14 +55,19 @@ document.getElementById("cursorText").onclick = () => {
   });
 
   function startDwell(el) {
-    if (!hoverMode || debounce || !el.matches("button,select,input")) return;
-    ring.classList.remove("hidden");
-    const dwellTime = quickType ? 700 : 1500;
-    ring.style.animation = "none";
-    void ring.offsetWidth;
-    ring.style.animation = `ringFill ${dwellTime}ms linear forwards`;
-    dwellTimer = setTimeout(() => el.click(), dwellTime);
-  }
+  if (debounce || !hoverMode) return;
+  if (!el.matches("button,select,input")) return;
+
+  ring.classList.remove("hidden");
+  const dwellTime = quickType ? 700 : 1500; // synced with mode
+  ring.style.animation = "none";
+  void ring.offsetWidth;
+  ring.style.animation = `ringFill ${dwellTime}ms linear forwards`;
+  dwellTimer = setTimeout(() => {
+    el.click();
+  }, dwellTime);
+}
+
   function endDwell() {
     ring.classList.add("hidden");
     clearTimeout(dwellTimer);
