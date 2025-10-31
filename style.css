@@ -33,20 +33,58 @@ button:hover{background:#444;}
 #saveMenu button:hover{background:#555;}
 
 /* 🎹 Keyboard */
-#keyboard{
-  background:#1e1e1e;border-top:1px solid #444;
-  padding:6px;display:flex;flex-direction:column;
-  height:40vh;z-index:400;
+#keyboard {
+  background: #1e1e1e;
+  border-top: 1px solid #444;
+  padding: 8px 6px 10px 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 40vh;                /* reduced height for better visual balance */
+  max-height: 40vh;
+  overflow: hidden;
+  z-index: 400;
+  transition: height 0.25s ease;
 }
-#kbHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
-.kbRow{display:flex;justify-content:center;gap:4px;margin:2px 0;}
-.kbRow button{
-  background:#333;color:#eee;border:none;border-radius:6px;
-  padding:10px;font-size:14px;min-width:40px;
+
+#kbHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
 }
-.kbRow button.wide{min-width:80px;}
-.kbRow button.extraWide{min-width:160px;}
-.kbRow button:hover{background:#555;}
+
+.kbRow {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin: 3px 0;
+}
+
+.kbRow button {
+  background: rgba(51, 51, 51, 0.9);
+  color: #eee;
+  border: none;
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 14px;
+  min-width: 40px;
+  transition: background 0.15s ease;
+}
+
+.kbRow button.wide {
+  min-width: 80px;
+}
+
+.kbRow button.extraWide {
+  min-width: 160px;
+}
+
+.kbRow button:hover {
+  background: #666;
+  box-shadow: 0 0 5px rgba(255,255,255,0.2);
+}
+
 
 /* dwell ring following cursor */
 #cursorRing{
