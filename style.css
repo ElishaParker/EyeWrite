@@ -127,7 +127,7 @@ button:hover {
   left: 0;
   width: 100%;
   border-top: 1px solid #333;
-  z-index: 60;                         /* sits above text but below hover ring */
+  z-index: 20;                         /* sits above text but below hover ring */
   background: rgba(34, 34, 34, 0.9);   /* consistent with top scroll bar */
   backdrop-filter: blur(4px);
 }
