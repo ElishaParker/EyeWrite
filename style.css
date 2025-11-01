@@ -123,7 +123,7 @@ button:hover {
 
 #scrollDown {
   position: fixed;                     /* ensures it stays visible */
-  bottom: calc(43vh);            /* anchors just above keyboard */
+  bottom: calc(44vh);            /* anchors just above keyboard */
   left: 0;
   width: 100%;
   border-top: 1px solid #333;
