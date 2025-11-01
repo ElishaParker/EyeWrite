@@ -76,7 +76,7 @@ button:hover {
 
 #textArea {
   flex: 1;
-  padding: 2rem 3rem; /* space for top/bottom scroll bars */
+  padding: 1rem 4rem; /* space for top/bottom scroll bars */
   overflow-y: auto;
   overflow-x: hidden;
   font-size: 16px;
