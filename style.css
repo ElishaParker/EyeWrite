@@ -64,9 +64,9 @@ button:hover {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  height: calc(100vh - 40vh - 60px); /* viewport minus keyboard + toolbar */
-  min-height: calc(100vh - 40vh - 60px);
-  max-height: calc(100vh - 40vh - 60px);
+  height: calc(100vh - 38vh - 62px); /* viewport minus keyboard + toolbar */
+  min-height: calc(100vh - 38vh - 62px);
+  max-height: calc(100vh - 38vh - 62px);
   background: #181818;
   border-top: 1px solid #333;
   border-bottom: 1px solid #333;
@@ -127,7 +127,7 @@ button:hover {
 
 #scrollDown {
   position: fixed;                     /* ensures it stays visible */
-  bottom: calc(40vh);            /* anchors just above keyboard */
+  bottom: calc(41vh);            /* anchors just above keyboard */
   left: 0;
   width: 100%;
   border-top: 1px solid #333;
