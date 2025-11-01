@@ -64,9 +64,9 @@ button:hover {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  height: 58vh;
-  min-height: 58vh;
-  max-height: 58vh;
+  height: 50vh;
+  min-height: 50vh;
+  max-height: 50vh;
   background: #181818;
   border-top: 1px solid #333;
   border-bottom: 1px solid #333;
