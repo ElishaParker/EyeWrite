@@ -64,9 +64,9 @@ button:hover {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  height: 38vh;
-  min-height: 38vh;
-  max-height: 38vh;
+  height: calc(100vh - 40vh - 60px); /* viewport minus keyboard + toolbar */
+  min-height: calc(100vh - 40vh - 60px);
+  max-height: calc(100vh - 40vh - 60px);
   background: #181818;
   border-top: 1px solid #333;
   border-bottom: 1px solid #333;
@@ -76,7 +76,7 @@ button:hover {
 
 #textArea {
   flex: 1;
-  padding: 3rem 3rem; /* space for top/bottom scroll bars */
+  padding: 3rem 3rem; /* space for scroll bars */
   overflow-y: auto;
   overflow-x: hidden;
   font-size: 16px;
@@ -86,7 +86,11 @@ button:hover {
   height: 100%;
   box-sizing: border-box;
   resize: none;
+
+  /* dynamically scale to fill textContainer */
+  max-height: 100%;
 }
+
 
 /* Scroll buttons now hover over text area edges */
 .scrollBtn {
