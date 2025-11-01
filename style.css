@@ -64,9 +64,9 @@ button:hover {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  height: calc(100vh - 38vh - 62px); /* viewport minus keyboard + toolbar */
-  min-height: calc(100vh - 38vh - 62px);
-  max-height: calc(100vh - 38vh - 62px);
+  height: calc(100vh - 36vh - 64px); /* viewport minus keyboard + toolbar */
+  min-height: calc(100vh - 36vh - 64px);
+  max-height: calc(100vh - 36vh - 64px);
   background: #181818;
   border-top: 1px solid #333;
   border-bottom: 1px solid #333;
@@ -76,7 +76,7 @@ button:hover {
 
 #textArea {
   flex: 1;
-  padding: 1.5rem 3rem; /* space for scroll bars */
+  padding: 1.5rem 4rem; /* space for scroll bars */
   overflow-y: auto;
   overflow-x: hidden;
   font-size: 16px;
