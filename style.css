@@ -118,7 +118,7 @@ button:hover {
 .scrollBtn {
   background: rgba(34, 34, 34, 0.9);
   pointer-events: auto;
-  z-index: 50; /* ensures above text but below modals */
+  z-index: 20; /* ensures above text but below modals */
 }
 
 #scrollDown {
