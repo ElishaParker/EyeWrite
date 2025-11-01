@@ -123,11 +123,11 @@ button:hover {
 
 #scrollDown {
   position: fixed;                     /* ensures it stays visible */
-  bottom: calc(40vh);            /* anchors just above keyboard */
+  bottom: calc(38vh);            /* anchors just above keyboard */
   left: 0;
   width: 100%;
   border-top: 1px solid #333;
-  z-index: 30;                         /* sits above text but below hover ring */
+  z-index: 60;                         /* sits above text but below hover ring */
   background: rgba(34, 34, 34, 0.9);   /* consistent with top scroll bar */
   backdrop-filter: blur(4px);
 }
